@@ -129,7 +129,7 @@ export default function Header() {
     >
       <div className="container mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between">
-          {/* Logo edited  and fixed*/}
+          {/* Logo edited  and fixedgir*/}
           <Link href="/" className="flex items-center">
             <div className="relative">
               
