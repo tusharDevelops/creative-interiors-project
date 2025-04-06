@@ -132,14 +132,15 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <div className="relative">
-              {
-                !isScrolled ? <Image
+              
+              {!isScrolled && <Image
                 src="/images/logo3.png"
                 alt="Creative Interiors"
                 width={200}
                 height={150}
                 className="object-contain"
-              />:<Image
+              />}
+              {isScrolled && <Image
               src="/images/logo4.png"
               alt="Creative Interiors"
               width={200}
