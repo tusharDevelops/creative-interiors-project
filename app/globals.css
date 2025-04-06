@@ -1,0 +1,170 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+
+    /* Brand colors from logo */
+    --magenta: 315 100% 50%;
+    --cyan: 180 100% 50%;
+    --lime: 90 100% 50%;
+    --orange: 30 100% 50%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.5% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Brand color utility classes */
+.text-magenta {
+  color: hsl(var(--magenta));
+}
+
+.text-cyan {
+  color: hsl(var(--cyan));
+}
+
+.text-lime {
+  color: hsl(var(--lime));
+}
+
+.text-orange {
+  color: hsl(var(--orange));
+}
+
+.bg-magenta {
+  background-color: hsl(var(--magenta));
+}
+
+.bg-cyan {
+  background-color: hsl(var(--cyan));
+}
+
+.bg-lime {
+  background-color: hsl(var(--lime));
+}
+
+.bg-orange {
+  background-color: hsl(var(--orange));
+}
+
+.border-magenta {
+  border-color: hsl(var(--magenta));
+}
+
+.border-cyan {
+  border-color: hsl(var(--cyan));
+}
+
+.border-lime {
+  border-color: hsl(var(--lime));
+}
+
+.border-orange {
+  border-color: hsl(var(--orange));
+}
+
+.hover\:bg-magenta:hover {
+  background-color: hsl(var(--magenta));
+}
+
+.hover\:bg-magenta\/5:hover {
+  background-color: hsla(var(--magenta), 0.05);
+}
+
+.hover\:bg-magenta\/90:hover {
+  background-color: hsla(var(--magenta), 0.9);
+}
+
+.hover\:text-magenta:hover {
+  color: hsl(var(--magenta));
+}
+
+/* Animation for infinite moving cards */
+@keyframes scroll-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - 1rem));
+  }
+}
+
+@keyframes scroll-right {
+  from {
+    transform: translateX(calc(-100% - 1rem));
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-scroll-left {
+  animation: scroll-left var(--duration, 40s) linear infinite;
+}
+
+.animate-scroll-right {
+  animation: scroll-right var(--duration, 40s) linear infinite;
+}
+
+.duration-20 {
+  --duration: 20s;
+}
+
+.duration-40 {
+  --duration: 40s;
+}
+
+.duration-60 {
+  --duration: 60s;
+}
+
