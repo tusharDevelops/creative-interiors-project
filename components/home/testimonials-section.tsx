@@ -56,14 +56,14 @@ const teamMembers = [
   {
     id: 3,
     name: "Mr. Vinay Agrawal",
-    designation: "Stakeholder",
+    designation: "",
     image: "/vinay.jpg",
   },
 
   {
     id: 4,
     name: "Mr. Tushar Chaurasiya",
-    designation: "SWE",
+    designation: "",
     image: "/tushar.jpg",
   },
   {
