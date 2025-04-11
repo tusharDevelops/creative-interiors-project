@@ -18,7 +18,7 @@ export function VideoMasking() {
       }}
     >
       <video autoPlay muted loop className="w-full h-full object-cover aspect-square">
-        <source src="/2.mp4" type="video/mp4" />
+        <source src="https://res.cloudinary.com/drhgdhxef/video/upload/v1744352817/creative/2_g89qgj.mp4" type="video/mp4" />
       </video>
     </section>
   )
