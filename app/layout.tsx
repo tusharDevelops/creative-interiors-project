@@ -30,6 +30,8 @@ export default function RootLayout({
   <meta name="description" content="Transform your space with Creative Interiors - offering premium interior and exterior design solutions for homes, offices, and commercial spaces." />
   <meta name="author" content="Creative Interiors" />
   <meta name="theme-color" content="#ffffff" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="robots" content="index, follow" />
   <meta name="apple-mobile-web-app-title" content="Creative Interiors" />
 

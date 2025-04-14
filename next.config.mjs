@@ -1,3 +1,5 @@
+import withPWA from 'next-pwa'
+
 let userConfig = undefined
 try {
   userConfig = await import('./v0-user-next.config')
@@ -30,9 +32,6 @@ const nextConfig = {
         hostname: 'walldecorpro.in',
         pathname: '/**',
       },
-      
-      
-     
     ],
   },
   experimental: {
@@ -42,7 +41,15 @@ const nextConfig = {
   },
 }
 
+// Merge external user config if available
 mergeConfig(nextConfig, userConfig)
+
+// Wrap with PWA support and export
+export default withPWA({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+})(nextConfig)
 
 function mergeConfig(nextConfig, userConfig) {
   if (!userConfig) {
@@ -63,5 +70,3 @@ function mergeConfig(nextConfig, userConfig) {
     }
   }
 }
-
-export default nextConfig
