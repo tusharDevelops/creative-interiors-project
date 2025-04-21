@@ -131,14 +131,14 @@ export default function Header() {
             <div className="relative">
               
               {!isScrolled && <Image
-                src="/images/logo3.png"
+                src="/images/logo3-min.png"
                 alt="Creative Interiors"
                 width={200}
                 height={150}
                 className="object-contain"
               />}
               {isScrolled && <Image
-              src="/images/logo4.png"
+              src="/images/logo4-min.png"
               alt="Creative Interiors"
               width={200}
               height={150}
