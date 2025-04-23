@@ -32,10 +32,10 @@ export default function Scene() {
       </Canvas>
       <article className='absolute w-full bottom-14  text-center'>
         <h1 className='2xl:text-8xl text-7xl tracking-tighter uppercase'>
-          Independent
+        Reimagined
         </h1>
         <p className='2xl:text-2xl text-xl'>
-          Live for yourself, not for society.
+        Design that feels like you
         </p>
       </article>
     </div>

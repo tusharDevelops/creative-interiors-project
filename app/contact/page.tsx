@@ -185,8 +185,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-lg font-medium text-gray-900">Email</h3>
-                    <a href="mailto:hello@creativeinteriors.com" className="text-magenta hover:underline">
-                      hello@creativeinteriors.com
+                    <a href="mailto:creativeinteriorssatna@gmail.com" className="text-magenta hover:underline">
+                    creativeinteriorssatna@gmail.com
                     </a>
                   </div>
                 </div>
@@ -196,8 +196,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-lg font-medium text-gray-900">Phone</h3>
-                    <a href="tel:+11234567890" className="text-cyan hover:underline">
-                      +1 (123) 456-7890
+                    <a href="tel:07672356032" className="text-cyan hover:underline">
+                    07672-356032
                     </a>
                   </div>
                 </div>
@@ -207,7 +207,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-lg font-medium text-gray-900">Location</h3>
-                    <p className="text-gray-600">123 Design Street, Creative City, 12345</p>
+                    <p className="text-gray-600">Khermai Road G.D Tower Shop No. 1, Satna: 485001, Madhya Pradesh</p>
                   </div>
                 </div>
               </div>
@@ -241,29 +241,17 @@ export default function ContactPage() {
                 </a>
               </div>
 
-              {/* Image with Ripple Effect */}
-              <div className="mt-12 relative rounded-2xl overflow-hidden">
-                <div className="relative h-[300px] w-full">
-                  <Image
-                    src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop"
-                    alt="Office Space"
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 bg-magenta/20 flex items-center justify-center">
-                    <p className="text-white text-xl font-bold">Hover over this image</p>
-                  </div>
-                </div>
-              </div>0
-              {/* <RippleEffect /> */}
-              
             </div>
           </div>
         </div>
       </section>
 
+      <div className="w-full h-full">
+      <RippleEffect/>
+      </div>
+
       {/* Office Locations */}
-      <section className="py-20 bg-gray-50">
+      {/* <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-12 text-center">Our Offices</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -322,7 +310,7 @@ export default function ContactPage() {
             </Card>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* FAQ Section */}
       <section className="py-20 bg-white">

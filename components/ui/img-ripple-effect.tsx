@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 
 const Scene = dynamic(() => import('@/components/ui/scene'), {
-  ssr: false,
+  
   loading: () => (
     <div
       role='status'
@@ -31,5 +31,5 @@ const Scene = dynamic(() => import('@/components/ui/scene'), {
 });
 
 export default function RippleEffect() {
-  return <Scene />;
+  return <><Scene /></>;
 }

@@ -1,17 +1,17 @@
-//@ts-nocheck
+// @ts-nocheck
 import React, { useRef, useEffect, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useFBO, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 import useDimension from '@/hooks/use-dimension';
 import useMouse from '@/hooks/use-mouse';
-import { vertex, fragment } from '@/lib/shaders';
-import brush from '@/public/brush.png';
+import { vertex } from '@/lib/shaders/vertex';
+import { fragment } from '@/lib/shaders/fragment';
 
 
 export default function Model() {
   const { viewport } = useThree();
-  const texture = useTexture(brush);
+  const texture = useTexture("/images/brush.png");
   const meshRefs = useRef([]);
   const [meshes, setMeshes] = useState([]);
   const mouse = useMouse();
@@ -110,7 +110,7 @@ export default function Model() {
 
       gl.setRenderTarget(null);
       gl.render(finalScene, camera);
-      // Render the scene with updated displacement
+      //Render the scene with updated displacement
       // gl.setRenderTarget(fboTexture);
       // gl.clear();
       // gl.render(scene, camera);
@@ -124,68 +124,68 @@ export default function Model() {
     }
   }, 1);
 
-  // function Images(viewport) {
-  //   const scene = new THREE.Scene();
-  //   const camera = new THREE.OrthographicCamera(
-  //     viewport.width / -2,
-  //     viewport.width / 2,
-  //     viewport.height / 2,
-  //     viewport.height / -2,
-  //     -1000,
-  //     1000
-  //   );
-  //   camera.position.z = 2;
-  //   scene.add(camera);
-  //   const geometry = new THREE.PlaneGeometry(1, 1);
-  //   const group = new THREE.Group();
-  //   const texture1 = useTexture('/picture1.jpeg');
-  //   const material1 = new THREE.MeshBasicMaterial({ map: texture1 });
-  //   const image1 = new THREE.Mesh(geometry, material1);
-  //   image1.position.x = -0.25 * viewport.width;
-  //   image1.position.y = 0;
-  //   image1.position.z = 1;
-  //   image1.scale.x = viewport.width / 5;
-  //   image1.scale.y = viewport.width / 4;
-  //   group.add(image1);
+  function Images(viewport) {
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(
+      viewport.width / -2,
+      viewport.width / 2,
+      viewport.height / 2,
+      viewport.height / -2,
+      -1000,
+      1000
+    );
+    camera.position.z = 2;
+    scene.add(camera);
+    const geometry = new THREE.PlaneGeometry(1, 1);
+    const group = new THREE.Group();
+    const texture1 = useTexture("/images/picture1.jpeg");
+    const material1 = new THREE.MeshBasicMaterial({ map: texture1 });
+    const image1 = new THREE.Mesh(geometry, material1);
+    image1.position.x = -0.25 * viewport.width;
+    image1.position.y = 0;
+    image1.position.z = 1;
+    image1.scale.x = viewport.width / 5;
+    image1.scale.y = viewport.width / 4;
+    group.add(image1);
 
-  //   const texture2 = useTexture('/picture2.jpeg');
-  //   const material2 = new THREE.MeshBasicMaterial({ map: texture2 });
-  //   const image2 = new THREE.Mesh(geometry, material2);
-  //   image2.position.x = 0;
-  //   image2.position.y = 0;
-  //   image2.position.z = 1;
-  //   image2.scale.x = viewport.width / 5;
-  //   image2.scale.y = viewport.width / 4;
-  //   group.add(image2);
+    const texture2 = useTexture("/images/picture2.jpeg");
+    const material2 = new THREE.MeshBasicMaterial({ map: texture2 });
+    const image2 = new THREE.Mesh(geometry, material2);
+    image2.position.x = 0;
+    image2.position.y = 0;
+    image2.position.z = 1;
+    image2.scale.x = viewport.width / 5;
+    image2.scale.y = viewport.width / 4;
+    group.add(image2);
 
-  //   const texture3 = useTexture('/picture3.jpeg');
-  //   const material3 = new THREE.MeshBasicMaterial({ map: texture3 });
-  //   const image3 = new THREE.Mesh(geometry, material3);
-  //   image3.position.x = 0.25 * viewport.width;
-  //   image3.position.y = 0;
-  //   image3.position.z = 1;
-  //   image3.scale.x = viewport.width / 5;
-  //   image3.scale.y = viewport.width / 4;
-  //   group.add(image3);
+    const texture3 = useTexture("/images/picture3.jpeg");
+    const material3 = new THREE.MeshBasicMaterial({ map: texture3 });
+    const image3 = new THREE.Mesh(geometry, material3);
+    image3.position.x = 0.25 * viewport.width;
+    image3.position.y = 0;
+    image3.position.z = 1;
+    image3.scale.x = viewport.width / 5;
+    image3.scale.y = viewport.width / 4;
+    group.add(image3);
 
-  //   scene.add(group);
-  //   return { scene, camera };
-  // }
+    scene.add(group);
+    return { scene, camera };
+  }
 
   return (
     <group>
-      {meshes}
-      {/* <Images /> */}
-      <mesh>
-        <planeGeometry args={[device.width, device.height, 1, 1]} />
-        <shaderMaterial
-          // args={[device.width, device.height, 1]}
-          vertexShader={vertex}
-          fragmentShader={fragment}
-          transparent={true}
-          uniforms={uniforms.current}
-        ></shaderMaterial>
-      </mesh>
-    </group>
+    {meshes}
+    {/* <Images /> */}
+    <mesh>
+      <planeGeometry args={[device.width, device.height, 1, 1]} />
+      <shaderMaterial
+        //args={[device.width, device.height, 1]}
+        vertexShader={vertex}
+        fragmentShader={fragment}
+        transparent={true}
+        uniforms={uniforms.current}
+      ></shaderMaterial>
+    </mesh>
+  </group>
   );
 }
