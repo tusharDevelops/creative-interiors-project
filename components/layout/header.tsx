@@ -66,6 +66,11 @@ const mainNavItems = [
         description: "Professional interior design services for residential spaces.",
       },
       {
+        title: "Exterior Design",
+        href: "/services/exterior-design",
+        description: "Specialized design solutions for outdoor environments.",
+      },
+      {
         title: "Commercial Design",
         href: "/services/commercial-design",
         description: "Specialized design solutions for commercial environments.",
@@ -96,6 +101,7 @@ const mainNavItems = [
     href: "/contact",
   },
 ]
+
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
