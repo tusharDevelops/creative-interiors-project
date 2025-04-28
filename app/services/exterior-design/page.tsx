@@ -85,7 +85,7 @@ export default function ExteriorDesignPage() {
     {
       quote:
         "The sustainable garden design not only looks beautiful but has reduced our water usage by 40%. A truly remarkable transformation.",
-      author: "Emma Rodriguezhttps://images.unsplash.com/photo-1600573472550-8090b0e0745e?q=80&w=2070&auto=format&fit=crop",
+      author: "Emma Rodriguez",
       role: "Eco-conscious Homeowner",
     },
   ]

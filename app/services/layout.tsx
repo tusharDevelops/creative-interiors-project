@@ -8,7 +8,6 @@ export default function ServicesLayout({
 }) {
   return (
     <div className="min-h-screen bg-white">
-      
       <main className="w-full pb-16">{children}</main>
     </div>
   )

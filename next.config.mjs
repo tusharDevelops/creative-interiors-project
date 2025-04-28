@@ -31,7 +31,13 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'walldecorpro.in',
         pathname: '/**',
+        
       },
+      {
+        protocol: 'https',
+        hostname: 'd68pxkftt5390.cloudfront.net',
+        pathname: '/**',
+      }
     ],
   },
   experimental: {

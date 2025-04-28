@@ -164,7 +164,7 @@ export default function AboutPage() {
   const isInView = useInView(ref, { once: true, amount: 0.2 })
 
   return (
-    <main className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
+<main className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
       {/* Hero Section with Wavy Background */}
       <section className="relative py-20 overflow-hidden">
       

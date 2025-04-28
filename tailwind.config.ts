@@ -60,6 +60,11 @@ const config: Config = {
         cyan: "hsl(var(--cyan))",
         lime: "hsl(var(--lime))",
         orange: "hsl(var(--orange))",
+        "brand-pink": "#ff0099",
+        "brand-cyan": "#00e5ff",
+        "brand-green": "#00c853",
+        "brand-blue": "#40c4ff",
+        "brand-orange": "#ff6d00",
       },
       borderRadius: {
         lg: "var(--radius)",

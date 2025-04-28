@@ -5,6 +5,7 @@ import "./globals.css"
 import Header from "@/components/layout/header"
 import Footer from "@/components/layout/footer"
 import { ThemeProvider } from "@/components/theme-provider"
+import PageWrapper from "@/components/layout/pageWrapper"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -60,11 +61,18 @@ export default function RootLayout({
   <meta name="twitter:image" content="https://www.creativeinteriorssatna.com/images/og-cover.png" />
 </head>
 
-      <body className={inter.className}>
+<body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          
+          <PageWrapper>
+          
           <Header />
           {children}
           <Footer />
+          
+          {/* Add any additional components or elements here */}
+          </PageWrapper> {/* Wrap children */}
+         
         </ThemeProvider>
       </body>
     </html>
@@ -74,3 +82,6 @@ export default function RootLayout({
 
 
 import './globals.css'
+
+
+
