@@ -11,6 +11,7 @@ import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid"
 import { HoverEffect } from "@/components/ui/hover-effect"
 import { ArrowRight, Check, Palette, Lightbulb, Home, Users } from "lucide-react"
 
+
 // Sample data for the page
 const interiorServices = [
   {
@@ -257,7 +258,9 @@ export default function InteriorDesignPage() {
                 Start Your Design Journey
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
+              
             </Link>
+            
           </div>
         </div>
       </section>

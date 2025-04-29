@@ -107,6 +107,8 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const pathname = usePathname()
+  const [isSheetOpen, setIsSheetOpen] = useState(false)
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -275,7 +277,7 @@ export default function Header() {
             </Button>
 
             {/* Mobile menu */}
-            <Sheet>
+            <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
               <SheetTrigger asChild>
                 <Button
                   variant="ghost"
@@ -307,10 +309,11 @@ export default function Header() {
                       {mainNavItems.map((item) => (
                         <div key={item.title}>
                           {item.children ? (
-                            <MobileSubmenu item={item} />
+                             <MobileSubmenu item={item} onLinkClick={() => setIsSheetOpen(false)} />
                           ) : (
                             <Link
                               href={item.href}
+                              onClick={() => setIsSheetOpen(false)}
                               className={cn(
                                 "block py-2 text-lg font-medium",
                                 pathname === item.href ? "text-magenta" : "text-gray-800",
@@ -398,9 +401,11 @@ interface MobileSubmenuProps {
       description?: string
     }[]
   }
+  onLinkClick: () => void
 }
 
-function MobileSubmenu({ item }: MobileSubmenuProps) {
+
+function MobileSubmenu({ item, onLinkClick }: MobileSubmenuProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -422,9 +427,15 @@ function MobileSubmenu({ item }: MobileSubmenuProps) {
           >
             <div className="pl-4 py-2 space-y-2">
               {item.children?.map((child) => (
-                <Link key={child.title} href={child.href} className="block py-2 text-gray-600 hover:text-magenta">
-                  {child.title}
-                </Link>
+                <Link
+                key={child.title}
+                href={child.href}
+                onClick={onLinkClick}
+                className="block py-2 text-gray-600 hover:text-magenta"
+              >
+                {child.title}
+              </Link>
+              
               ))}
             </div>
           </motion.div>

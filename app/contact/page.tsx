@@ -12,8 +12,9 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
 import { LampContainer } from "@/components/ui/lamp"
 import { GithubGradientButton } from "@/components/ui/github-gradient-button"
-import { Mail, Phone, MapPin, Github, Linkedin, Twitter, Instagram, Send, CheckCircle } from "lucide-react"
+import { Mail, Phone, MapPin, Send, CheckCircle } from "lucide-react"
 import RippleEffect from "@/components/ui/img-ripple-effect"
+
 
 export default function ContactPage() {
   const [formState, setFormState] = useState({
@@ -215,30 +216,30 @@ export default function ContactPage() {
               <h3 className="text-lg font-medium text-gray-900 mb-4">Connect with us</h3>
               <div className="flex space-x-4">
                 
-                <a
+                {/* <a
                   href="https://linkedin.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-gray-100 p-3 rounded-full hover:bg-cyan/10 transition-colors"
                 >
                   <Linkedin className="h-6 w-6 text-gray-700" />
-                </a>
-                <a
+                </a> */}
+                {/* <a
                   href="https://twitter.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-gray-100 p-3 rounded-full hover:bg-lime/10 transition-colors"
                 >
                   <Twitter className="h-6 w-6 text-gray-700" />
-                </a>
-                <a
+                </a> */}
+                {/* <a
                   href="https://instagram.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-gray-100 p-3 rounded-full hover:bg-orange/10 transition-colors"
                 >
                   <Instagram className="h-6 w-6 text-gray-700" />
-                </a>
+                </a> */}
               </div>
 
             </div>
@@ -246,7 +247,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <div className="w-full h-full">
+      <div className=" w-full h-full">
       <RippleEffect/>
       </div>
 
@@ -399,7 +400,7 @@ export default function ContactPage() {
             Let's collaborate to bring your vision to life with cutting-edge design and exceptional craftsmanship
           </p>
           <Button asChild size="lg" className="rounded-full px-8 bg-white text-magenta hover:bg-white/90">
-            <Link href="#top">Get Started</Link>
+            <Link href = "#top">Contact</Link>
           </Button>
         </div>
       </section>
