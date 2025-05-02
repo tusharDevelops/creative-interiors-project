@@ -645,7 +645,7 @@ export default function ExteriorDesignPage() {
                   </Button>
                 </div>
               </div>
-            </section>
+      </section>
     </>
   )
 }

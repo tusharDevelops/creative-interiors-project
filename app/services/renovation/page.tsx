@@ -104,7 +104,7 @@ export default function RenovationPage() {
   return (
     <main className="min-h-screen pb-16 md:pb-0">
       {/* Hero Section */}
-      <section className="relative h-[60vh] flex items-center justify-center overflow-hidden">
+      <section className="relative h-[75vh] flex items-center justify-center overflow-hidden">
         <BackgroundBeams className="absolute inset-0 z-10" />
             <Image
             src="/hero.jpg"
@@ -167,7 +167,7 @@ export default function RenovationPage() {
       <section className="py-16 md:py-24 bg-white">
         <div className="container mx-auto px-4">
           <Tabs defaultValue="services" value={activeTab} onValueChange={setActiveTab} className="max-w-6xl mx-auto">
-            <TabsList className="grid w-full grid-cols-3 mb-12">
+            <TabsList className="grid w-full grid-cols-1 mb-20 md:grid-cols-3">
               <TabsTrigger value="services">Our Services</TabsTrigger>
               <TabsTrigger value="process" id="process-tab">
                 Renovation Process

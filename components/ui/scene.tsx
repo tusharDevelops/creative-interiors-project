@@ -31,9 +31,12 @@ export default function Scene() {
         <Model />
       </Canvas>
       <article className='absolute w-full bottom-14  text-center'>
-        <h1 className='2xl:text-8xl text-7xl tracking-tighter uppercase'>
-        Reimagined
-        </h1>
+      <h1 className=" tracking-tighter uppercase text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[10rem] leading-none">
+  Reimagined
+</h1>
+
+
+
         <p className='2xl:text-2xl text-xl'>
         Design that feels like you
         </p>
