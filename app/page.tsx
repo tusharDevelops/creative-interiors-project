@@ -14,7 +14,7 @@ export default function Home() {
       <CategoryShowcase />
       <ServicesSection />
       <TestimonialsSection />
-      <BlogPreview />
+      {/* <BlogPreview /> */}
       <NewsletterSection />
     </main>
   )

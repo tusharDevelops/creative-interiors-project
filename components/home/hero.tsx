@@ -32,14 +32,22 @@ const exteriorDesignImage =
       {/* Background with parallax effect */}
       <motion.div style={{ y, opacity }} className="absolute inset-0 w-full h-full">
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80 z-10" />
-        <video
+        {/* <video
     src="/intro+.mp4"
     autoPlay
     loop
     muted
     playsInline
     className="absolute inset-0 w-full h-full object-cover"
-  />
+  /> */}
+
+  <Image
+        src="/portfolio-white.jpg"
+        alt="Hero Background"
+        layout="fill"
+        objectFit="cover"
+        priority
+      />
       </motion.div>
 
       {/* Spotlight effect */}

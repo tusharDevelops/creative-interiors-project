@@ -90,7 +90,7 @@ const consultationTypes = [
     title: "Interior Design",
     description: "For residential spaces including living rooms, bedrooms, kitchens, etc.",
     duration: "60 min",
-    price: "$150",
+    price: "₹2000",
     image: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=1932&auto=format&fit=crop",
   },
   {
@@ -98,7 +98,7 @@ const consultationTypes = [
     title: "Exterior Design",
     description: "For outdoor spaces, facades, landscapes, and gardens.",
     duration: "60 min",
-    price: "$150",
+    price: "₹2500",
     image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop",
   },
   {
@@ -106,7 +106,7 @@ const consultationTypes = [
     title: "Commercial Design",
     description: "For offices, retail spaces, restaurants, and other commercial properties.",
     duration: "90 min",
-    price: "$250",
+    price: "₹3500",
     image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=2069&auto=format&fit=crop",
   },
   {
@@ -114,7 +114,7 @@ const consultationTypes = [
     title: "Renovation Planning",
     description: "For planning complete renovations and remodeling projects.",
     duration: "90 min",
-    price: "$250",
+    price: "₹2500",
     image: "https://images.unsplash.com/photo-1600607687644-c7f34bc91088?q=80&w=2070&auto=format&fit=crop",
   },
 ]
@@ -125,30 +125,31 @@ const timeSlots = ["9:00 AM", "10:00 AM", "11:00 AM", "1:00 PM", "2:00 PM", "3:0
 // Testimonials
 const testimonials = [
   {
-    name: "Sarah Johnson",
+    name: "Aarti Desai",
     role: "Homeowner",
     content:
-      "The consultation was incredibly helpful. The designer understood my vision immediately and provided practical solutions that fit my budget.",
+      "The consultation was extremely insightful. The designer immediately understood our preferences and suggested creative yet budget-friendly ideas.",
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1887&auto=format&fit=crop",
     rating: 5,
   },
   {
-    name: "Michael Chen",
+    name: "Rakesh Khurana",
     role: "Restaurant Owner",
     content:
-      "Their commercial design consultation transformed how I thought about my restaurant space. The ideas were innovative yet practical.",
+      "The commercial design consultation gave our restaurant a whole new look. The suggestions were modern, practical, and perfect for our brand.",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1887&auto=format&fit=crop",
     rating: 5,
   },
   {
-    name: "Emily Rodriguez",
+    name: "Neha Verma",
     role: "Office Manager",
     content:
-      "We needed help redesigning our office space for better workflow. The consultation provided exactly what we needed and more.",
+      "We were planning an office revamp and needed expert advice. The consultation was spot on — smart ideas that really enhanced our workspace.",
     image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=1961&auto=format&fit=crop",
     rating: 4,
   },
-]
+];
+
 
 export default function ConsultationPage() {
   const [activeTab, setActiveTab] = useState("process")

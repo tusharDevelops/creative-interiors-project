@@ -9,35 +9,36 @@ import { AnimatedTooltip } from "@/components/ui/animated-tooltip"
 const testimonials = [
   {
     quote:
-      "Creative Interiors transformed our living room into a stunning space that perfectly reflects our style. The attention to detail and quality of work exceeded our expectations.",
-    name: "Sarah Johnson",
-    title: "Homeowner - Living Room Redesign",
+      "Creative Interiors completely transformed our living room into a beautiful space that reflects our family's taste. The detailing and craftsmanship were beyond what we imagined.",
+    name: "Priya Sharma",
+    title: "Homeowner - Living Room Makeover",
   },
   {
     quote:
-      "The commercial design services provided by Creative Interiors completely transformed our office space. Our employees love the new environment, and it has significantly improved productivity and morale.",
-    name: "Michael Chen",
-    title: "Office Manager - Corporate Office Redesign",
+      "We revamped our office interiors with Creative Interiors, and the difference is remarkable. The new design has boosted employee energy and made our workplace more vibrant.",
+    name: "Rohit Mehra",
+    title: "Operations Head - Office Renovation",
   },
   {
     quote:
-      "Working with Creative Interiors on our restaurant renovation was a fantastic experience. They understood our vision and created a space that our customers absolutely love. The project was completed on time and within budget.",
-    name: "Emily Rodriguez",
-    title: "Restaurant Owner - Restaurant Renovation",
+      "Partnering with Creative Interiors for our café redesign was a great decision. They brought our ideas to life and created a cozy yet trendy ambiance that our customers truly enjoy.",
+    name: "Meera Nair",
+    title: "Café Owner - Café Renovation",
   },
   {
     quote:
-      "We hired Creative Interiors for our kitchen remodel and couldn't be happier with the results. Their team was professional, creative, and attentive to our needs throughout the entire process.",
-    name: "David Thompson",
-    title: "Homeowner - Kitchen Remodel",
+      "Our kitchen went from outdated to ultra-modern, all thanks to Creative Interiors. Their team was punctual, polite, and very responsive to all our suggestions.",
+    name: "Amit Verma",
+    title: "Homeowner - Modular Kitchen Upgrade",
   },
   {
     quote:
-      "The team at Creative Interiors has an incredible eye for detail. They transformed our outdated space into a modern, functional environment that we love coming home to every day.",
-    name: "Jennifer Lee",
+      "Creative Interiors gave our 20-year-old home a fresh new life. Their design ideas were practical yet stylish, and every corner now feels thoughtfully curated.",
+    name: "Sunita Iyer",
     title: "Homeowner - Full Home Renovation",
   },
-]
+];
+
 
 // Mock data for team members
 const teamMembers = [

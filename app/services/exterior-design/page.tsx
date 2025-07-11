@@ -69,26 +69,26 @@ export default function ExteriorDesignPage() {
     },
   ]
 
-  const testimonials = [
-    {
-      quote:
-        "The exterior design team transformed our backyard into a stunning oasis. The attention to detail and creative vision exceeded our expectations.",
-      author: "Sarah Johnson",
-      role: "Residential Client",
-    },
-    {
-      quote:
-        "Our commercial property's curb appeal has dramatically improved thanks to the innovative landscape design. We've received countless compliments.",
-      author: "Michael Chen",
-      role: "Business Owner",
-    },
-    {
-      quote:
-        "The sustainable garden design not only looks beautiful but has reduced our water usage by 40%. A truly remarkable transformation.",
-      author: "Emma Rodriguez",
-      role: "Eco-conscious Homeowner",
-    },
-  ]
+  // const testimonials = [
+  //   {
+  //     quote:
+  //       "The exterior design team transformed our backyard into a stunning oasis. The attention to detail and creative vision exceeded our expectations.",
+  //     author: "Sarah Johnson",
+  //     role: "Residential Client",
+  //   },
+  //   {
+  //     quote:
+  //       "Our commercial property's curb appeal has dramatically improved thanks to the innovative landscape design. We've received countless compliments.",
+  //     author: "Michael Chen",
+  //     role: "Business Owner",
+  //   },
+  //   {
+  //     quote:
+  //       "The sustainable garden design not only looks beautiful but has reduced our water usage by 40%. A truly remarkable transformation.",
+  //     author: "Emma Rodriguez",
+  //     role: "Eco-conscious Homeowner",
+  //   },
+  // ]
 
   const faqs = [
     {
@@ -463,7 +463,7 @@ export default function ExteriorDesignPage() {
       </section>
 
       {/* Testimonials Section - Fixed Implementation */}
-      <section className="py-24 md:py-32 px-4 bg-gray-50">
+      {/* <section className="py-24 md:py-32 px-4 bg-gray-50">
         <div className="container mx-auto">
           <div className="text-center mb-16">
             <motion.h2
@@ -517,7 +517,7 @@ export default function ExteriorDesignPage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* FAQ Section with Tracing Beam */}
       <section className="py-24 md:py-32 px-4 bg-white">
