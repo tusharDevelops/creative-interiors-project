@@ -20,10 +20,6 @@ import {
   Rocket,
   Users,
   MoveRight,
-  Github,
-  Linkedin,
-  Twitter,
-  Instagram,
   Award,
   Heart,
   Clock,
@@ -33,32 +29,60 @@ import Image from "next/image"
 import Earth from "@/components/globe"
 
 // Journey content for sticky scroll
+// const journeyContent = [
+//   {
+//     title: "Our Beginning",
+//     description:
+//       "Creative Interiors was founded in 2008 with a vision to transform ordinary spaces into extraordinary environments. What began as a small design studio has grown into a full-service interior design firm with a reputation for excellence and innovation.",
+//     image: "https://images.pexels.com/photos/4860068/pexels-photo-4860068.jpeg", // Art studio with tables
+//   },
+//   {
+//     title: "Growth & Expansion",
+//     description:
+//       "By 2012, we had expanded our team and services to include commercial projects alongside our residential work. This period marked significant growth as we established partnerships with architects, contractors, and artisans who shared our commitment to quality and design excellence.",
+//     image: "https://images.pexels.com/photos/4692281/pexels-photo-4692281.jpeg", // Building under construction
+//   },
+//   {
+//     title: "International Recognition",
+//     description:
+//       "In 2016, our work gained international recognition when our Luxury Penthouse project was featured in several prestigious design publications. This exposure led to opportunities to work on projects across Europe and Asia, expanding our global footprint.",
+//     image: "https://images.pexels.com/photos/13201477/pexels-photo-13201477.jpeg", // Modern luxury apartment
+//   },
+//   {
+//     title: "Today & Beyond",
+//     description:
+//       "Today, Creative Interiors stands as a leader in the design industry with a diverse portfolio of award-winning projects. We continue to push boundaries, embrace sustainable practices, and create spaces that inspire and delight our clients around the world.",
+//     image: "https://images.pexels.com/photos/29586720/pexels-photo-29586720.jpeg", // Modern art-inspired living room
+//   },
+// ];
+
 const journeyContent = [
   {
-    title: "Our Beginning",
+    title: "Our Beginning (2014)",
     description:
-      "Creative Interiors was founded in 2008 with a vision to transform ordinary spaces into extraordinary environments. What began as a small design studio has grown into a full-service interior design firm with a reputation for excellence and innovation.",
-    image: "https://images.pexels.com/photos/4860068/pexels-photo-4860068.jpeg", // Art studio with tables
+      "Creative Interiors began its journey in 2014 from a small design studio in Satna, Madhya Pradesh. With a vision to make beautiful and functional spaces accessible to everyone, we started with a handful of residential projects, focusing on modern aesthetics blended with Indian sensibilities.",
+    image: "https://images.pexels.com/photos/4860068/pexels-photo-4860068.jpeg", // Studio workspace
   },
   {
-    title: "Growth & Expansion",
+    title: "Local Growth & Trust (2016–2018)",
     description:
-      "By 2012, we had expanded our team and services to include commercial projects alongside our residential work. This period marked significant growth as we established partnerships with architects, contractors, and artisans who shared our commitment to quality and design excellence.",
-    image: "https://images.pexels.com/photos/4692281/pexels-photo-4692281.jpeg", // Building under construction
+      "Within just a few years, our work gained local recognition. We expanded our services across Satna and nearby cities, taking on both residential and small commercial spaces. Our focus on quality, Vastu-aligned designs, and client-first approach helped us build lasting trust.",
+    image: "https://images.pexels.com/photos/4692281/pexels-photo-4692281.jpeg", // Site under work
   },
   {
-    title: "International Recognition",
+    title: "Diverse Projects & Collaborations (2019–2021)",
     description:
-      "In 2016, our work gained international recognition when our Luxury Penthouse project was featured in several prestigious design publications. This exposure led to opportunities to work on projects across Europe and Asia, expanding our global footprint.",
-    image: "https://images.pexels.com/photos/13201477/pexels-photo-13201477.jpeg", // Modern luxury apartment
+      "From modular kitchens to complete home makeovers and office interiors, we began handling turnkey projects across Madhya Pradesh. Our collaborations with Indian brands, local artisans, and material vendors allowed us to offer customized solutions rooted in Indian craftsmanship.",
+    image: "https://images.pexels.com/photos/13201477/pexels-photo-13201477.jpeg", // Finished Indian-style modern room
   },
   {
-    title: "Today & Beyond",
+    title: "A Pan-India Vision (2022–Present)",
     description:
-      "Today, Creative Interiors stands as a leader in the design industry with a diverse portfolio of award-winning projects. We continue to push boundaries, embrace sustainable practices, and create spaces that inspire and delight our clients around the world.",
-    image: "https://images.pexels.com/photos/29586720/pexels-photo-29586720.jpeg", // Modern art-inspired living room
+      "Today, Creative Interiors is working towards a pan-India presence, offering a one-stop solution for all interior needs—home, commercial, retail, and more. Our portfolio reflects a fusion of Indian tradition and contemporary design, with a strong focus on sustainability and smart living.",
+    image: "https://images.pexels.com/photos/29586720/pexels-photo-29586720.jpeg", // Stylish Indian-inspired room
   },
 ];
+
 
 // Values data for bento grid
 const values = [
@@ -350,48 +374,6 @@ export default function AboutPage() {
 </section>
 
       {/* Connect Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Connect With Us</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">Follow our work and get in touch</p>
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-6">
-            
-            <Link href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
-              <Button
-                variant="outline"
-                size="lg"
-                className="rounded-full border-gray-300 text-gray-700 hover:bg-gray-100"
-              >
-                <Linkedin className="mr-2 h-5 w-5" />
-                LinkedIn
-              </Button>
-            </Link>
-            <Link href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-              <Button
-                variant="outline"
-                size="lg"
-                className="rounded-full border-gray-300 text-gray-700 hover:bg-gray-100"
-              >
-                <Twitter className="mr-2 h-5 w-5" />
-                Twitter
-              </Button>
-            </Link>
-            <Link href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-              <Button
-                variant="outline"
-                size="lg"
-                className="rounded-full border-gray-300 text-gray-700 hover:bg-gray-100"
-              >
-                <Instagram className="mr-2 h-5 w-5" />
-                Instagram
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-magenta to-cyan">

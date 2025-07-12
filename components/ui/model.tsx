@@ -138,7 +138,7 @@ export default function Model() {
     scene.add(camera);
     const geometry = new THREE.PlaneGeometry(1, 1);
     const group = new THREE.Group();
-    const texture1 = useTexture("/images/picture1.jpeg");
+    const texture1 = useTexture("/images/picture1.jpg");
     const material1 = new THREE.MeshBasicMaterial({ map: texture1 });
     const image1 = new THREE.Mesh(geometry, material1);
     image1.position.x = -0.25 * viewport.width;
@@ -148,7 +148,7 @@ export default function Model() {
     image1.scale.y = viewport.width / 4;
     group.add(image1);
 
-    const texture2 = useTexture("/images/picture2.jpeg");
+    const texture2 = useTexture("/images/picture2.jpg");
     const material2 = new THREE.MeshBasicMaterial({ map: texture2 });
     const image2 = new THREE.Mesh(geometry, material2);
     image2.position.x = 0;
@@ -158,7 +158,7 @@ export default function Model() {
     image2.scale.y = viewport.width / 4;
     group.add(image2);
 
-    const texture3 = useTexture("/images/picture3.jpeg");
+    const texture3 = useTexture("/images/picture3.jpg");
     const material3 = new THREE.MeshBasicMaterial({ map: texture3 });
     const image3 = new THREE.Mesh(geometry, material3);
     image3.position.x = 0.25 * viewport.width;

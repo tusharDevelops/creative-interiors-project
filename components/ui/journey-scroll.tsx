@@ -101,7 +101,7 @@ export const JourneyScroll = ({ items }: { items: JourneyItem[] }) => {
           Creative Interiors
         </h1>
         <section className="bg-black h-40 relative z-10 grid place-content-center text-2xl rounded-tr-full rounded-tl-full">
-          Transforming Spaces Since 2008
+          Transforming Spaces 
         </section>
       </footer>
     </div>

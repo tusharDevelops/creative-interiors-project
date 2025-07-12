@@ -213,34 +213,8 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Connect with us</h3>
-              <div className="flex space-x-4">
-                
-                {/* <a
-                  href="https://linkedin.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-gray-100 p-3 rounded-full hover:bg-cyan/10 transition-colors"
-                >
-                  <Linkedin className="h-6 w-6 text-gray-700" />
-                </a> */}
-                {/* <a
-                  href="https://twitter.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-gray-100 p-3 rounded-full hover:bg-lime/10 transition-colors"
-                >
-                  <Twitter className="h-6 w-6 text-gray-700" />
-                </a> */}
-                {/* <a
-                  href="https://instagram.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-gray-100 p-3 rounded-full hover:bg-orange/10 transition-colors"
-                >
-                  <Instagram className="h-6 w-6 text-gray-700" />
-                </a> */}
-              </div>
+              
+              
 
             </div>
           </div>
