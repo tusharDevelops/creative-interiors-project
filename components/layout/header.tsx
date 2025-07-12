@@ -292,7 +292,7 @@ export default function Header() {
                   <div className="py-4">
                     <div className="relative h-10 w-40 mb-6">
                       <Image
-                        src="/images/logo4.png"
+                        src="/images/logo4-min.png"
                         alt="Creative Interiors"
                         width={160}
                         height={40}
