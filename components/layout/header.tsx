@@ -137,22 +137,16 @@ export default function Header() {
           {/* Logo edited  and fixedgir*/}
           <Link href="/" className="flex items-center">
             <div className="relative">
-              
-              {!isScrolled && <Image
-                src="/images/logo3-min.png"
-                alt="Creative Interiors"
-                width={200}
-                height={150}
-                className="object-contain"
-              />}
-              {isScrolled && <Image
-              src="/images/logo4-min.png"
+            <Image
+               priority
+              src={isScrolled ? "/images/logo4-min.png" : "/images/logo3-min.png"}
               alt="Creative Interiors"
               width={200}
               height={150}
               className="object-contain"
-            />}
-            </div>
+            />
+          </div>
+
           </Link>
 
           {/* Desktop Navigation */}
