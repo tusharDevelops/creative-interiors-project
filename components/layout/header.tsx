@@ -35,25 +35,22 @@ const mainNavItems = [
         description: "Browse our complete collection of interior design products.",
       },
       {
-        title: "Furniture",
-        href: "/products/category/furniture",
-        description: "Explore our range of premium furniture for every room.",
+        title: "Customized Shop",
+        href: "/custom-shop",
+        description: "Create your own customized wallpaper,blinds etc.",
       },
       {
-        title: "Lighting",
-        href: "/products/category/lighting",
-        description: "Discover lighting solutions to enhance your space.",
+        title: "Furniture",
+        href: "/products/furniture",
+        description: "Explore our range of premium furniture for every space.",
       },
       {
         title: "Decor",
-        href: "/products/category/decor",
-        description: "Find the perfect decorative accents for your home.",
+        href: "/products/decor",
+        description: "Find unique decor items to enhance your interiors.",
       },
-      {
-        title: "Textiles",
-        href: "/products/category/textiles",
-        description: "Shop our collection of quality fabrics and textiles.",
-      },
+      
+      
     ],
   },
   {

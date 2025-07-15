@@ -14,7 +14,7 @@ export default function Footer() {
             <div className="space-y-6">
               <div className="relative h-12 w-48">
                 <Image
-                  src="/images/logo3.png"
+                  src="/images/logo3-min.png"
                   alt="Creative Interiors"
                   width={192}
                   height={48}
