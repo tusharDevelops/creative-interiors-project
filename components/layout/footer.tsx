@@ -14,7 +14,7 @@ export default function Footer() {
             <div className="space-y-6">
               <div className="relative h-12 w-48">
                 <Image
-                  src="/images/logo3.png"
+                  src="/images/logo3-min.png"
                   alt="Creative Interiors"
                   width={192}
                   height={48}
@@ -119,7 +119,7 @@ export default function Footer() {
               <div className="mt-6">
                 <h4 className="text-sm font-medium mb-3">Business Hours</h4>
                 <p className="text-gray-400 text-sm">
-                  Monday - Saturday: 9:00 AM - 9:00 PM
+                  Monday - Saturday: 10:00 AM - 8:00 PM
                   <br />
                   Sunday: 9:00 AM - 6:00 PM
                 </p>
