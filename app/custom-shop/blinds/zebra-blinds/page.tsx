@@ -1,8 +1,9 @@
 import Link from "next/link"
-import { ArrowLeft, Palette, Camera } from "lucide-react"
+import { ArrowLeft, Palette, Camera, Upload, Ruler, Layers, Shield, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
+import CustomCard from "@/components/custom-card"
 
 
 export default function ZebraBlindsVariationPage() {
@@ -40,59 +41,66 @@ export default function ZebraBlindsVariationPage() {
         </div>
 
         {/* Options */}
-        <div className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {/* Custom Photo Option */}
-          <Card className="relative overflow-hidden border border-gray-200 hover:border-brand-pink/50 transition-all duration-300 hover:shadow-xl animate-fade-in bg-white">
-            <div className="h-64 bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 relative">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg">
-                  <Camera className="w-10 h-10 text-brand-pink" />
-                </div>
-              </div>
-            </div>
+        <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+          
+          <CustomCard
+            title="Custom Photo Zebra Blinds"
+            description="Upload your image and design your own zebra blinds that blend sheer and solid fabrics for modern light control."
+            features={[
+              { icon: Upload, text: "Upload any image" },
+              { icon: Ruler, text: "Tailor-made dimensions" },
+              { icon: Layers, text: "Sheer & solid fabric mix" },
+              { icon: Shield, text: "UV & privacy protection" },
+            ]}
+            price="₹120"
+            priceUnit="per sq ft"
+            badge={{
+              text: "Modern Look",
+              icon: Camera,
+              color: "pink",
+            }}
+            heroIcon={Camera}
+            gradientFrom="from-pink-100"
+            gradientTo="to-blue-100"
+            buttonText="Start Customizing"
+            href="/custom-shop/blinds/zebra-blinds/custom-photo"
+            qualityBadge={{
+              text: "Layered Design",
+              icon: Layers,
+            }}
+            delay="0s"
+          />
 
-            <CardContent className="p-8">
-              <h3 className="text-2xl font-bold text-foreground mb-4">Custom Photo</h3>
-              <p className="text-muted-foreground mb-6 leading-relaxed">
-                Upload your own image to create personalized zebra blinds with alternating sheer and opaque stripes.
-              </p>
+          <CustomCard
+            title="Catalogue Zebra Blinds"
+            description="Choose from our designer range of zebra blinds that combine functionality and aesthetics for homes and offices."
+            features={[
+              { icon: Palette, text: "Dual-layered patterns" },
+              { icon: Layers, text: "Sheer + blackout styles" },
+              { icon: Star, text: "Contemporary designs" },
+              { icon: Shield, text: "Glare & heat reduction" },
+            ]}
+            price="₹100"
+            priceUnit="per sq ft"
+            badge={{
+              text: "Trending",
+              icon: Star,
+              color: "blue",
+            }}
+            heroIcon={Palette}
+            gradientFrom="from-cyan-100"
+            gradientTo="to-blue-100"
+            buttonText="Browse Designs"
+            href="/custom-shop/blinds/zebra-blinds/catalogue-design"
+            qualityBadge={{
+                text: "Premium Collection",
+                icon: Star,
+              }}
+              delay="0.2s"
+            />
+          </div>
 
-              <Link href="/custom-shop/blinds/zebra-blinds/custom-photo">
-                <Button className="w-full bg-gradient-to-r from-brand-pink to-pink-500 hover:from-pink-500 hover:to-brand-pink text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg">
-                  Start Customizing →
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-
-          {/* Catalogue Design Option */}
-          <Card
-            className="relative overflow-hidden border border-gray-200 hover:border-brand-cyan/50 transition-all duration-300 hover:shadow-xl animate-fade-in bg-white"
-            style={{ animationDelay: "0.2s" }}
-          >
-            <div className="h-64 bg-gradient-to-br from-cyan-100 via-green-100 to-blue-100 relative">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg">
-                  <Palette className="w-10 h-10 text-brand-cyan" />
-                </div>
-              </div>
-            </div>
-
-            <CardContent className="p-8">
-              <h3 className="text-2xl font-bold text-foreground mb-4">Catalogue Designs</h3>
-              <p className="text-muted-foreground mb-6 leading-relaxed">
-                Choose from our curated collection of zebra blind patterns and designs.
-              </p>
-
-              <Link href="/custom-shop/blinds/zebra-blinds/catalogue-design">
-                <Button className="w-full bg-gradient-to-r from-brand-cyan to-cyan-500 hover:from-cyan-500 hover:to-brand-cyan text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg">
-                  Browse Designs →
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
         </div>
-      </div>
     </div>
   )
 }

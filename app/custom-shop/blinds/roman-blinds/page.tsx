@@ -1,8 +1,9 @@
 import Link from "next/link"
-import { ArrowLeft, Palette, Camera } from "lucide-react"
+import { ArrowLeft, Palette, Camera, Upload, Layers, Ruler, Shield, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
+import CustomCard from "@/components/custom-card"
 
 export default function RomanBlindsVariationPage() {
   return (
@@ -39,58 +40,64 @@ export default function RomanBlindsVariationPage() {
         </div>
 
         {/* Options */}
-        <div className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {/* Custom Photo Option */}
-          <Card className="relative overflow-hidden border border-gray-200 hover:border-brand-pink/50 transition-all duration-300 hover:shadow-xl animate-fade-in bg-white">
-            <div className="h-64 bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 relative">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg">
-                  <Camera className="w-10 h-10 text-brand-pink" />
-                </div>
-              </div>
-            </div>
+        <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+          <CustomCard
+            title="Custom Photo Roman Blinds"
+            description="Upload your own image to create personalized roman blinds with elegant fabric folds."
+            features={[
+              { icon: Upload, text: "Upload any image" },
+              { icon: Layers, text: "Premium fabric textures" },
+              { icon: Ruler, text: "Made-to-measure sizes" },
+              { icon: Shield, text: "Durability guaranteed" },
+            ]}
+            price="₹110"
+            priceUnit="per sq ft"
+            badge={{
+              text: "Elegant",
+              icon: Camera,
+              color: "pink",
+            }}
+            heroIcon={Camera}
+            gradientFrom="from-pink-100"
+            gradientTo="to-blue-100"
+            buttonText="Start Customizing"
+            href="/custom-shop/blinds/roman-blinds/custom-photo"
+            qualityBadge={{
+              text: "Custom Fabric",
+              icon: Shield,
+            }}
+            delay="0s"
+          />
 
-            <CardContent className="p-8">
-              <h3 className="text-2xl font-bold text-foreground mb-4">Custom Photo</h3>
-              <p className="text-muted-foreground mb-6 leading-relaxed">
-                Upload your own image to create personalized roman blinds with elegant fabric folds.
-              </p>
-
-              <Link href="/custom-shop/blinds/roman-blinds/custom-photo">
-                <Button className="w-full bg-gradient-to-r from-brand-pink to-pink-500 hover:from-pink-500 hover:to-brand-pink text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg">
-                  Start Customizing →
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-
-          {/* Catalogue Design Option */}
-          <Card
-            className="relative overflow-hidden border border-gray-200 hover:border-brand-cyan/50 transition-all duration-300 hover:shadow-xl animate-fade-in bg-white"
-            style={{ animationDelay: "0.2s" }}
-          >
-            <div className="h-64 bg-gradient-to-br from-cyan-100 via-green-100 to-blue-100 relative">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg">
-                  <Palette className="w-10 h-10 text-brand-cyan" />
-                </div>
-              </div>
-            </div>
-
-            <CardContent className="p-8">
-              <h3 className="text-2xl font-bold text-foreground mb-4">Catalogue Designs</h3>
-              <p className="text-muted-foreground mb-6 leading-relaxed">
-                Choose from our curated collection of roman blind patterns and elegant designs.
-              </p>
-
-              <Link href="/custom-shop/blinds/roman-blinds/catalogue-design">
-                <Button className="w-full bg-gradient-to-r from-brand-cyan to-cyan-500 hover:from-cyan-500 hover:to-brand-cyan text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg">
-                  Browse Designs →
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
+          <CustomCard
+            title="Catalogue Roman Blinds"
+            description="Choose from our curated collection of roman blind patterns and elegant designs."
+            features={[
+              { icon: Palette, text: "Elegant designer patterns" },
+              { icon: Layers, text: "Premium material options" },
+              { icon: Star, text: "Trending collections" },
+              { icon: Shield, text: "Quality assured" },
+            ]}
+            price="₹95"
+            priceUnit="per sq ft"
+            badge={{
+              text: "Classic",
+              icon: Palette,
+              color: "blue",
+            }}
+            heroIcon={Palette}
+            gradientFrom="from-cyan-100"
+            gradientTo="to-blue-100"
+            buttonText="Browse Designs"
+            href="/custom-shop/blinds/roman-blinds/catalogue-design"
+            qualityBadge={{
+              text: "500+ Patterns",
+              icon: Star,
+            }}
+            delay="0.2s"
+          />
         </div>
+
       </div>
     </div>
   )

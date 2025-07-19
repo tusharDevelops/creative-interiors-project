@@ -373,7 +373,7 @@ export default function ProductsPage() {
       <section className="relative h-[60vh] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 -z-1">
         <Image
-          src="/products.jpeg"
+          src="/products.jpg"
           alt="Background"
           fill
           className="object-cover"

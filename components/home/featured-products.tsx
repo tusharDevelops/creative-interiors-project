@@ -493,6 +493,176 @@ const CustomizedWallpaperContent = () => (
 
 
 
+const VersaSheetContent = () => (
+  <div className="bg-[#F5F5F7] dark:bg-neutral-800 p-8 md:p-14 rounded-3xl mb-4">
+    <p className="text-neutral-600 dark:text-neutral-400 text-base md:text-2xl font-sans max-w-4xl mx-auto">
+      <span className="font-bold text-neutral-700 dark:text-neutral-200">
+        Versa Sheet – Laminated Calcium Polymer Composite Sheet
+      </span>{" "}
+      is a revolutionary surfacing solution designed to elevate both interiors and exteriors. Known for its excellent durability, weather resistance, and elegant finish, Versa Sheet is ideal for wall paneling, modular furniture, signage, and cladding applications. Its advanced polymer composite core and laminated surface provide long-lasting performance with low maintenance, making it a preferred choice for modern designs that demand both aesthetics and strength.
+    </p>
+
+    <p className="text-neutral-600 dark:text-neutral-400 text-base md:text-lg font-sans max-w-3xl mx-auto mt-4">
+      <span className="font-semibold text-neutral-700 dark:text-neutral-200">
+        Key Features:
+      </span>{" "}
+      Waterproof, termite-proof, fire-retardant, lightweight, and easy to cut or bend — Versa Sheet is the perfect blend of form and function for creative interiors.
+    </p>
+
+    {/* Images from Walldecorpro */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+      <Image
+        src="/show/versa-1.png"
+        alt="Versa Sheet Application 1"
+        height={500}
+        width={500}
+        className="w-full h-full object-cover rounded-xl"
+      />
+      <Image
+        src="/show/versa-2.jpeg"
+        alt="Versa Sheet Application 2"
+        height={500}
+        width={500}
+        className="w-full h-full object-cover rounded-xl"
+      />
+      <Image
+        src="/show/versa-3.jpeg"
+        alt="Versa Sheet Application 3"
+        height={500}
+        width={500}
+        className="w-full h-full object-cover rounded-xl"
+      />
+      <Image
+        src="/show/versa-4.jpeg"
+        alt="Versa Sheet Application 4"
+        height={500}
+        width={500}
+        className="w-full h-full object-cover rounded-xl"
+      />
+      <Image
+        src="/show/versa-5.jpeg"
+        alt="Versa Sheet Application 5"
+        height={500}
+        width={500}
+        className="w-full h-full object-cover rounded-xl"
+      />
+      <Image
+        src="/show/versa-6.jpeg"
+        alt="Versa Sheet Application 6"
+        height={500}
+        width={500}
+        className="w-full h-full object-cover rounded-xl"
+      />
+    </div>
+  </div>
+);
+
+const MTrackCurtainContent = () => (
+  <div className="bg-[#F5F5F7] dark:bg-neutral-800 p-8 md:p-14 rounded-3xl mb-4">
+    <p className="text-neutral-600 dark:text-neutral-400 text-base md:text-2xl font-sans max-w-3xl mx-auto">
+      <span className="font-bold text-neutral-700 dark:text-neutral-200">
+        Sleek, Silent, and Smart Curtain Movement.
+      </span>{" "}
+      Experience the perfect blend of elegance and functionality with our M-Track Curtain Systems. Designed for smooth, noiseless operation, these premium-grade tracks support both manual and motorized curtain solutions — ideal for modern homes, offices, and hospitality spaces.
+    </p>
+
+    <p className="text-neutral-600 dark:text-neutral-400 text-base md:text-lg font-sans max-w-3xl mx-auto mt-4">
+      <span className="font-semibold text-neutral-700 dark:text-neutral-200">
+        Key Features:
+      </span>{" "}
+      Easy-glide technology, sleek profiles, ceiling or wall mount options, and compatibility with smart home systems. M-Track brings a refined touch to your interiors.
+    </p>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+      <Image
+        src="/show/m-track-1.png"
+        alt="M-Track Curtain System 1"
+        height={500}
+        width={500}
+        className="w-full h-full object-cover rounded-xl"
+      />
+      <Image
+        src="/show/m-track-2.png"
+        alt="M-Track Curtain System 2"
+        height={500}
+        width={500}
+        className="w-full h-full object-cover rounded-xl"
+      />
+      <Image
+        src="/show/m-track-3.png"
+        alt="M-Track Curtain System 3"
+        height={500}
+        width={500}
+        className="w-full h-full object-cover rounded-xl"
+      />
+      <Image
+        src="/show/m-track-4.png"
+        alt="M-Track Curtain System 4"
+        height={500}
+        width={500}
+        className="w-full h-full object-cover rounded-xl"
+      />
+    </div>
+  </div>
+);
+
+const BlindsContent = () => (
+  <div className="bg-[#F5F5F7] dark:bg-neutral-800 p-8 md:p-14 rounded-3xl mb-4">
+    <p className="text-neutral-600 dark:text-neutral-400 text-base md:text-2xl font-sans max-w-3xl mx-auto">
+      <span className="font-bold text-neutral-700 dark:text-neutral-200">
+        Premium Window Blinds — Style Meets Functionality.
+      </span>{" "}
+      Choose from a wide range of modern blinds including Roller, Zebra, Roman, Vertical, and Wooden styles — perfect for homes, offices, showrooms, and hospitality spaces. Our blinds offer precise light control, privacy, and aesthetic appeal tailored to your décor.
+    </p>
+
+    <p className="text-neutral-600 dark:text-neutral-400 text-base md:text-lg font-sans max-w-3xl mx-auto mt-4">
+      <span className="font-semibold text-neutral-700 dark:text-neutral-200">
+        Available Types:
+      </span>{" "}
+      Roller Blinds, Zebra Blinds (Sheer Shades), Roman Blinds, Vertical Blinds, and Wooden Venetian Blinds — customizable by fabric, size, and mechanism (manual or motorized).
+    </p>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+      <Image
+        src="/1-roller.jpeg"
+        alt="Roller Blinds"
+        height={500}
+        width={500}
+        className="w-full h-full object-cover rounded-xl"
+      />
+      <Image
+        src="/zebra-1.jpeg"
+        alt="Zebra Blinds"
+        height={500}
+        width={500}
+        className="w-full h-full object-cover rounded-xl"
+      />
+      <Image
+        src="/roman-1.jpeg"
+        alt="Roman Blinds"
+        height={500}
+        width={500}
+        className="w-full h-full object-cover rounded-xl"
+      />
+      <Image
+        src="/vertical-1.jpeg"
+        alt="Vertical Blinds"
+        height={500}
+        width={500}
+        className="w-full h-full object-cover rounded-xl"
+      />
+      <Image
+        src="/wood-1.jpeg"
+        alt="Wooden Blinds"
+        height={500}
+        width={500}
+        className="w-full h-full object-cover rounded-xl"
+      />
+    </div>
+  </div>
+);
+
+
 
 
 
@@ -547,7 +717,30 @@ const data = [
     title: "Create Personalized Spaces with Customized Wallpapers",
     src: "https://walldecorpro.in/wp-content/uploads/2024/07/3aa5933276f63be39d37a3769d297418.jpg",
     content: <CustomizedWallpaperContent />,
-  }
+  },
+  {
+  category: "Versa Sheet",
+  title: "Elevate Interiors with Laminated Versa Sheets",
+  src: "/show/versa-6.jpeg",
+  content: <VersaSheetContent />,
+},
+
+{
+  category: "M-Track Curtain Systems",
+  title: "Sleek & Silent M-Track Curtain Systems",
+  src: "/show/m-track-1.png",
+  content: <MTrackCurtainContent />,
+},
+{
+  category: "Window Blinds",
+  title: "Custom Roller, Zebra, Roman, Vertical & Wooden Blinds",
+  src: "/roman-1.jpeg",
+  content: <BlindsContent />,
+}
+
+
+
+ 
   
   
 ];

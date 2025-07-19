@@ -1,8 +1,9 @@
 import Link from "next/link"
-import { ArrowLeft, Upload, Palette, Camera } from "lucide-react"
+import { ArrowLeft, Upload, Palette, Camera, Shield, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
+import CustomCard from "@/components/custom-card"
 
 export default function RollerBlindsVariationPage() {
   return (
@@ -39,95 +40,61 @@ export default function RollerBlindsVariationPage() {
         </div>
 
         {/* Options */}
-        <div className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {/* Custom Photo Option */}
-          <Card className="relative overflow-hidden border border-gray-200 hover:border-brand-pink/50 transition-all duration-300 hover:shadow-xl animate-fade-in bg-white">
-            <div className="h-64 bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 relative">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg">
-                  <Camera className="w-10 h-10 text-brand-pink" />
-                </div>
-              </div>
-              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2">
-                <div className="bg-white rounded-lg p-4 shadow-lg flex items-center gap-3">
-                  <div className="w-12 h-12 bg-gray-100 rounded flex items-center justify-center">
-                    <Upload className="w-6 h-6 text-gray-400" />
-                  </div>
-                  <span className="text-gray-600 font-medium">Your Custom Image</span>
-                </div>
-              </div>
-            </div>
+        <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+  <CustomCard
+    title="Custom Photo Blinds"
+    description="Upload your own image to create personalized roller blinds. Perfect for family photos, artwork, or branded designs."
+    features={[
+      { icon: Upload, text: "Upload any image" },
+      { icon: Palette, text: "Multiple material options" },
+    ]}
+    price="₹90"
+    priceUnit="per sq ft"
+    badge={{
+      text: "Popular",
+      icon: Star,
+      color: "pink",
+    }}
+    heroIcon={Camera}
+    gradientFrom="from-pink-100"
+    gradientTo="to-blue-100"
+    buttonText="Start Customizing"
+    href="/custom-shop/blinds/roller-blinds/custom-photo"
+    qualityBadge={{
+      text: "Quality Assured",
+      icon: Shield,
+    }}
+    delay="0s"
+  />
 
-            <CardContent className="p-8">
-              <h3 className="text-2xl font-bold text-foreground mb-4">Custom Photo</h3>
-              <p className="text-muted-foreground mb-6 leading-relaxed">
-                Upload your own image to create personalized roller blinds. Perfect for family photos, artwork, or
-                branded designs.
-              </p>
+  <CustomCard
+    title="Catalogue Design Blinds"
+    description="Choose from our curated collection of professional patterns and designs created by expert designers."
+    features={[
+      { icon: Palette, text: "Professional designs" },
+      { icon: Upload, text: "Ready to print" },
+    ]}
+    price="₹75"
+    priceUnit="per sq ft"
+    badge={{
+      text: "Designer",
+      icon: Palette,
+      color: "blue",
+    }}
+    heroIcon={Palette}
+    gradientFrom="from-cyan-100"
+    gradientTo="to-blue-100"
+    buttonText="Browse Designs"
+    href="/custom-shop/blinds/roller-blinds/catalogue-design"
+    qualityBadge={{
+      text: "500+ Designs",
+      icon: Star,
+    }}
+    delay="0.2s"
+  />
+</div>
 
-              <div className="space-y-3 mb-8">
-                <div className="flex items-center gap-3">
-                  <Upload className="w-5 h-5 text-brand-pink" />
-                  <span className="text-sm">Upload any image</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Palette className="w-5 h-5 text-brand-pink" />
-                  <span className="text-sm">Multiple material options</span>
-                </div>
-              </div>
-
-              <Link href="/custom-shop/blinds/roller-blinds/custom-photo">
-                <Button className="w-full bg-gradient-to-r from-brand-pink to-pink-500 hover:from-pink-500 hover:to-brand-pink text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg">
-                  Start Customizing →
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-
-          {/* Catalogue Design Option */}
-          <Card
-            className="relative overflow-hidden border border-gray-200 hover:border-brand-cyan/50 transition-all duration-300 hover:shadow-xl animate-fade-in bg-white"
-            style={{ animationDelay: "0.2s" }}
-          >
-            <div className="h-64 bg-gradient-to-br from-cyan-100 via-green-100 to-blue-100 relative">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg">
-                  <Palette className="w-10 h-10 text-brand-cyan" />
-                </div>
-              </div>
-              <div className="absolute bottom-6 right-6 grid grid-cols-2 gap-2">
-                <div className="w-8 h-8 bg-purple-400 rounded"></div>
-                <div className="w-8 h-8 bg-blue-400 rounded"></div>
-                <div className="w-8 h-8 bg-green-400 rounded"></div>
-                <div className="w-8 h-8 bg-cyan-300 rounded"></div>
-              </div>
-            </div>
-
-            <CardContent className="p-8">
-              <h3 className="text-2xl font-bold text-foreground mb-4">Catalogue Designs</h3>
-              <p className="text-muted-foreground mb-6 leading-relaxed">
-                Choose from our curated collection of professional patterns and designs created by expert designers.
-              </p>
-
-              <div className="space-y-3 mb-8">
-                <div className="flex items-center gap-3">
-                  <Palette className="w-5 h-5 text-brand-cyan" />
-                  <span className="text-sm">Professional designs</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Upload className="w-5 h-5 text-brand-cyan" />
-                  <span className="text-sm">Ready to print</span>
-                </div>
-              </div>
-
-              <Link href="/custom-shop/blinds/roller-blinds/catalogue-design">
-                <Button className="w-full bg-gradient-to-r from-brand-cyan to-cyan-500 hover:from-cyan-500 hover:to-brand-cyan text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg">
-                  Browse Designs →
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-        </div>
+        
       </div>
     </div>
   )

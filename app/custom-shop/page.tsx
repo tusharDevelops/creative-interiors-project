@@ -17,7 +17,7 @@ const productCategories = [
     popular: true,
     projects: "2,847",
     rating: 4.9,
-    price: "From $8.99",
+    price: "From ₹60",
     bgColor: "bg-gradient-to-br from-orange-50 to-pink-50",
     textColor: "text-gray-900",
     size: "large", // Takes 2 columns
@@ -33,7 +33,7 @@ const productCategories = [
     popular: false,
     projects: "1,923",
     rating: 4.8,
-    price: "From $12.99",
+    price: "From ₹70",
     bgColor: "bg-gradient-to-br from-slate-900 to-slate-800",
     textColor: "text-white",
     size: "medium",
@@ -49,7 +49,7 @@ const productCategories = [
     popular: true,
     projects: "3,156",
     rating: 4.9,
-    price: "From $15.99",
+    price: "From ₹200",
     bgColor: "bg-gradient-to-br from-emerald-50 to-teal-50",
     textColor: "text-gray-900",
     size: "medium",
@@ -65,7 +65,7 @@ const productCategories = [
     popular: false,
     projects: "987",
     rating: 4.7,
-    price: "From $9.99",
+    price: "From ₹60",
     bgColor: "bg-gradient-to-br from-sky-100 to-blue-100",
     textColor: "text-gray-900",
     size: "large", // Takes 2 columns
@@ -196,7 +196,7 @@ export default function CustomShopPage() {
                       Premium custom wallpapers with endless design possibilities.
                     </p>
                     <div className="flex items-center justify-between">
-                      <div className="text-lg font-medium text-white">From $8.99 per sq ft</div>
+                      <div className="text-lg font-medium text-white">From ₹60 per sq ft</div>
                       <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
                         <Plus className="w-5 h-5 text-white" />
                       </div>
@@ -239,7 +239,7 @@ export default function CustomShopPage() {
                       Elegant solutions for the perfect balance of privacy and light.
                     </p>
                     <div className="flex items-center justify-between">
-                      <div className="text-lg font-medium text-white">From $12.99 per sq ft</div>
+                      <div className="text-lg font-medium text-white">From ₹100 per sq ft</div>
                       <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
                         <Plus className="w-5 h-5 text-white" />
                       </div>
@@ -288,7 +288,7 @@ export default function CustomShopPage() {
                       Museum-quality canvas prints that bring your photos to life.
                     </p>
                     <div className="flex items-center justify-between">
-                      <div className="text-lg font-medium text-white">From $15.99</div>
+                      <div className="text-lg font-medium text-white">From ₹200/sq ft </div>
                       <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
                         <Plus className="w-5 h-5 text-white" />
                       </div>
@@ -332,7 +332,7 @@ export default function CustomShopPage() {
                       Decorative films that add style while maintaining natural light.
                     </p>
                     <div className="flex items-center justify-between">
-                      <div className="text-lg font-medium text-white">From $9.99</div>
+                      <div className="text-lg font-medium text-white">From ₹70/sq ft</div>
                       <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
                         <Plus className="w-5 h-5 text-white" />
                       </div>
