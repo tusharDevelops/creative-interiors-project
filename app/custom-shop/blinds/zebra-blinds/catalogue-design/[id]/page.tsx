@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { MaterialSelectionModal } from "@/components/MaterialSelectionModal"
 import Image from "next/image"
+import { zebraBlindsMaterials } from "@/utils/Material"
 
 
 // Mock design data - in real app this would come from API
@@ -342,11 +343,14 @@ export default function ZebraBlindsCatalogueCustomizePage({ params }: { params: 
       {/* Material Selection Modal */}
       {showMaterialModal && (
         <MaterialSelectionModal
-          onClose={() => setShowMaterialModal(false)}
-          onSelect={(material) => {
-            setMaterialType(material)
-            setShowMaterialModal(false)
-          }}
+        materials={zebraBlindsMaterials}
+        title="Select Material for Zebra Blinds"
+        subtitle="Choose the best material for your personalised zebra blinds"
+        onClose={() => setShowMaterialModal(false)}
+        onSelect={(material) => {
+          setMaterialType(material)
+          setShowMaterialModal(false)
+        }}
         />
       )}
     </div>

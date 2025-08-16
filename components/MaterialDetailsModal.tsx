@@ -4,6 +4,11 @@ import { X, Star, Shield, Droplets, Flame, Leaf } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 
+interface MaterialSpec {
+  key: string
+  value: string
+}
+
 interface Material {
   id: number
   name: string
@@ -15,7 +20,9 @@ interface Material {
   features: string[]
   image: string
   badge: string
+  specs: MaterialSpec[]
 }
+
 
 interface MaterialDetailsModalProps {
   material: Material
@@ -48,6 +55,8 @@ export function MaterialDetailsModal({ material, onClose }: MaterialDetailsModal
         return "bg-gray-100 text-gray-700 border-gray-200"
     }
   }
+
+  console.log(material)
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[60] p-4">
@@ -163,26 +172,21 @@ export function MaterialDetailsModal({ material, onClose }: MaterialDetailsModal
               {/* Specifications */}
               <Card>
                 <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold mb-4">Specifications</h3>
-                  <div className="space-y-3">
-                    <div className="flex justify-between py-2 border-b border-gray-100">
-                      <span className="text-muted-foreground">Thickness</span>
-                      <span className="font-medium">0.5mm - 2mm</span>
+                <h3 className="text-lg font-semibold mb-4">Specifications</h3>
+                <div className="space-y-3">
+                  {material.specs.map((spec, index) => (
+                    <div
+                      key={index}
+                      className={`flex justify-between py-2 ${
+                        index !== material.specs.length - 1 ? "border-b border-gray-100" : ""
+                      }`}
+                    >
+                      <span className="text-muted-foreground">{spec.key}</span>
+                      <span className="font-medium">{spec.value}</span>
                     </div>
-                    <div className="flex justify-between py-2 border-b border-gray-100">
-                      <span className="text-muted-foreground">Width</span>
-                      <span className="font-medium">Up to 54 inches</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-gray-100">
-                      <span className="text-muted-foreground">Durability</span>
-                      <span className="font-medium">5-10 years</span>
-                    </div>
-                    <div className="flex justify-between py-2">
-                      <span className="text-muted-foreground">Installation</span>
-                      <span className="font-medium">Professional Required</span>
-                    </div>
-                  </div>
-                </CardContent>
+                  ))}
+                </div>
+              </CardContent>
               </Card>
 
               {/* Action Buttons */}

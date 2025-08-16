@@ -2,12 +2,14 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ArrowLeft, Upload, Palette, Ruler } from "lucide-react"
+import { ArrowLeft, Upload, Palette, Ruler, Info } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Image from "next/image"
+import { MaterialSelectionModal } from "@/components/MaterialSelectionModal"
+import { zebraBlindsMaterials } from "@/utils/Material"
 
 
 const colors = [
@@ -23,6 +25,8 @@ export default function ZebraBlindsCustomPage() {
   const [selectedColor, setSelectedColor] = useState("")
   const [width, setWidth] = useState("")
   const [height, setHeight] = useState("")
+  const [showMaterialModal, setShowMaterialModal] = useState(false)
+  const [materialType, setMaterialType] = useState("")
 
   return (
     <div className="min-h-screen bg-white">
@@ -138,6 +142,22 @@ export default function ZebraBlindsCustomPage() {
                   </div>
                 </div>
 
+                {/* Material/Fabric Type */}
+                <div className="space-y-3">
+                  <Label htmlFor="material-type" className="text-base font-semibold">
+                    Material/Fabric Type
+                  </Label>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-between border-brand-pink text-brand-pink hover:bg-brand-pink/5 bg-transparent"
+                    onClick={() => setShowMaterialModal(true)}
+                  >
+                    {materialType || "Select Material Type"}
+                    <Info className="w-4 h-4" />
+                  </Button>
+                </div>
+                
+
                 {/* Color Selection */}
                 <div className="space-y-3">
                   <Label className="text-base font-semibold">Color Options</Label>
@@ -196,6 +216,20 @@ export default function ZebraBlindsCustomPage() {
           </div>
         </div>
       </div>
+
+        {/* Material Selection Modal */}
+            {showMaterialModal && (
+              <MaterialSelectionModal
+              materials={zebraBlindsMaterials}
+              title="Select Material for Custom Photo Zebra Blinds"
+              subtitle="Choose the best material for your personalised zebra blinds"
+              onClose={() => setShowMaterialModal(false)}
+              onSelect={(material) => {
+                setMaterialType(material)
+                setShowMaterialModal(false)
+              }}
+              />
+            )}
     </div>
   )
 }

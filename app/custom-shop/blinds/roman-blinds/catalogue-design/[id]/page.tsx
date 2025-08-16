@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { MaterialSelectionModal } from "@/components/MaterialSelectionModal"
 import Image from "next/image"
+import { romanBlindsMaterials } from "@/utils/Material"
 
 
 // Mock design data - in real app this would come from API
@@ -403,12 +404,15 @@ export default function RomanBlindsCatalogueCustomizePage({ params }: { params: 
       {/* Material Selection Modal */}
       {showMaterialModal && (
         <MaterialSelectionModal
-          onClose={() => setShowMaterialModal(false)}
-          onSelect={(material) => {
-            setMaterialType(material)
-            setShowMaterialModal(false)
-          }}
-        />
+        materials={romanBlindsMaterials}
+        title="Select Material"
+        subtitle="Choose from our premium roman blind fabric collection"
+        onClose={() => setShowMaterialModal(false)}
+        onSelect={(material) => {
+          setMaterialType(material)
+          setShowMaterialModal(false)
+        }}
+      />
       )}
     </div>
   )

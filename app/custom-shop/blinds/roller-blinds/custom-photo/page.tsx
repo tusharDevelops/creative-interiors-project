@@ -7,16 +7,11 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { MaterialDetailsModal } from "@/components/MaterialDetailsModal"
 import Image from "next/image"
+import { MaterialSelectionModal } from "@/components/MaterialSelectionModal"
+import {rollerBlindsMaterials} from "@/utils/Material"
 
-const fabricTypes = [
-  { value: "blackout", label: "Blackout Fabric" },
-  { value: "sunscreen", label: "Sunscreen Fabric" },
-  { value: "light-filter", label: "Light Filter" },
-  { value: "thermal", label: "Thermal Insulated" },
-]
-
+  
 const colors = [
   { value: "white", label: "Pure White", color: "#ffffff" },
   { value: "cream", label: "Cream", color: "#f5f5dc" },
@@ -33,6 +28,8 @@ export default function RollerBlindsCustomPage() {
   const [height, setHeight] = useState("")
   const [showMaterialModal, setShowMaterialModal] = useState(false)
   const [materialType, setMaterialType] = useState("")
+
+
 
   return (
     <div className="min-h-screen bg-white">
@@ -229,192 +226,17 @@ export default function RollerBlindsCustomPage() {
       {/* Material Selection Modal */}
       {showMaterialModal && (
         <MaterialSelectionModal
-          onClose={() => setShowMaterialModal(false)}
-          onSelect={(material) => {
-            setMaterialType(material)
-            setShowMaterialModal(false)
-          }}
-        />
+        materials={rollerBlindsMaterials}
+        title="Select Material for Custom Photo Roller Blinds"
+        subtitle="Choose the best material for your personalised roller blinds"
+        onClose={() => setShowMaterialModal(false)}
+        onSelect={(material) => {
+          setMaterialType(material)
+          setShowMaterialModal(false)
+        }}
+      />
       )}
     </div>
   )
 }
 
-function MaterialSelectionModal({ onClose, onSelect }: { onClose: () => void; onSelect: (material: string) => void }) {
-  const [selectedCategory, setSelectedCategory] = useState("All")
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedMaterialDetails, setSelectedMaterialDetails] = useState<any>(null)
-
-  const categories = [
-    { name: "All", count: 20 },
-    { name: "Blackout", count: 8 },
-    { name: "Sunscreen", count: 6 },
-    { name: "Light Filter", count: 6 },
-  ]
-
-  const materials = [
-    {
-      id: 1,
-      name: "Premium Blackout",
-      code: "BLK-001",
-      price: 45,
-      rating: 4.8,
-      category: "Blackout",
-      description: "Complete light blocking fabric perfect for bedrooms and media rooms.",
-      features: ["Light Block", "Thermal"],
-      image: "/placeholder.svg?height=150&width=200",
-      badge: "premium",
-    },
-    {
-      id: 2,
-      name: "Sunscreen Mesh",
-      code: "SUN-002",
-      price: 35,
-      rating: 4.6,
-      category: "Sunscreen",
-      description: "UV protection while maintaining outside view and natural light.",
-      features: ["UV Protection", "View Through"],
-      image: "/placeholder.svg?height=150&width=200",
-      badge: "popular",
-    },
-    {
-      id: 3,
-      name: "Light Filter Fabric",
-      code: "LF-003",
-      price: 30,
-      rating: 4.4,
-      category: "Light Filter",
-      description: "Soft light diffusion for comfortable ambient lighting.",
-      features: ["Light Filter", "Privacy"],
-      image: "/placeholder.svg?height=150&width=200",
-      badge: "eco",
-    },
-  ]
-
-  const filteredMaterials = materials.filter((material) => {
-    const matchesCategory = selectedCategory === "All" || material.category === selectedCategory
-    const matchesSearch = material.name.toLowerCase().includes(searchTerm.toLowerCase())
-    return matchesCategory && matchesSearch
-  })
-
-  return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden">
-        <div className="p-6 border-b flex-shrink-0">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold">Select Material Type</h2>
-            <Button variant="ghost" onClick={onClose} className="text-gray-500 hover:text-gray-700">
-              ✕
-            </Button>
-          </div>
-          <p className="text-muted-foreground">Choose the perfect material for your roller blinds</p>
-        </div>
-
-        <div className="flex-1 overflow-y-auto">
-          <div className="p-6">
-            {/* Search */}
-            <div className="mb-6">
-              <Input
-                placeholder="Search materials..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full"
-              />
-            </div>
-
-            {/* Categories */}
-            <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
-              {categories.map((category) => (
-                <Button
-                  key={category.name}
-                  variant={selectedCategory === category.name ? "default" : "outline"}
-                  className={`whitespace-nowrap flex-shrink-0 ${
-                    selectedCategory === category.name
-                      ? "bg-brand-pink text-white"
-                      : "border-gray-300 text-gray-700 hover:bg-gray-50"
-                  }`}
-                  onClick={() => setSelectedCategory(category.name)}
-                >
-                  {category.name} {category.count}
-                </Button>
-              ))}
-            </div>
-
-            {/* Materials Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredMaterials.map((material) => (
-                <Card key={material.id} className="relative overflow-hidden hover:shadow-lg transition-shadow">
-                  {material.badge && (
-                    <div className="absolute top-2 right-2 z-10">
-                      <span
-                        className={`px-2 py-1 rounded text-xs font-medium text-white ${
-                          material.badge === "premium"
-                            ? "bg-purple-500"
-                            : material.badge === "popular"
-                              ? "bg-blue-500"
-                              : material.badge === "eco"
-                                ? "bg-green-500"
-                                : "bg-gray-500"
-                        }`}
-                      >
-                        {material.badge}
-                      </span>
-                    </div>
-                  )}
-
-                  <div className="aspect-[4/3] bg-gray-100 relative overflow-hidden">
-                    <img
-                      src={material.image || "/placeholder.svg"}
-                      alt={material.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-
-                  <CardContent className="p-4">
-                    <div className="flex justify-between items-start mb-2">
-                      <h3 className="font-semibold text-sm">{material.name}</h3>
-                      <span className="text-brand-pink font-bold text-lg">${material.price}</span>
-                    </div>
-
-                    <p className="text-xs text-muted-foreground mb-2">{material.code}</p>
-                    <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{material.description}</p>
-
-                    <div className="flex items-center gap-2 mb-3 flex-wrap">
-                      {material.features.map((feature) => (
-                        <span key={feature} className="text-xs px-2 py-1 rounded bg-blue-100 text-blue-700">
-                          {feature}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="flex justify-between items-center">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-xs text-muted-foreground hover:text-foreground"
-                        onClick={() => setSelectedMaterialDetails(material)}
-                      >
-                        Details
-                      </Button>
-                      <Button
-                        size="sm"
-                        className="bg-brand-pink hover:bg-brand-pink/90 text-white text-xs"
-                        onClick={() => onSelect(material.name)}
-                      >
-                        Select
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {selectedMaterialDetails && (
-          <MaterialDetailsModal material={selectedMaterialDetails} onClose={() => setSelectedMaterialDetails(null)} />
-        )}
-      </div>
-    </div>
-  )
-}

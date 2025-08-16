@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { MaterialSelectionModal } from "@/components/MaterialSelectionModal"
 import Image from "next/image"
+import { verticalBlindsMaterials } from "@/utils/Material"
 
 
 const slatWidths = [
@@ -317,11 +318,14 @@ export default function VerticalBlindsCustomPage() {
       {/* Material Selection Modal */}
       {showMaterialModal && (
         <MaterialSelectionModal
-          onClose={() => setShowMaterialModal(false)}
-          onSelect={(material) => {
-            setMaterialType(material)
-            setShowMaterialModal(false)
-          }}
+        materials={verticalBlindsMaterials}
+        title="Select Material for Custom Photo Vertical Blinds"
+        subtitle="Choose the best material for your personalised vertical blinds"
+        onClose={() => setShowMaterialModal(false)}
+        onSelect={(material) => {
+          setMaterialType(material)
+          setShowMaterialModal(false)
+        }}
         />
       )}
     </div>

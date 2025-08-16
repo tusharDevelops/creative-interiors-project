@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { MaterialSelectionModal } from "@/components/MaterialSelectionModal"
 import Image from "next/image"
+import { romanBlindsMaterials } from "@/utils/Material"
 
 
 const foldStyles = [
@@ -347,12 +348,15 @@ export default function RomanBlindsCustomPage() {
       {/* Material Selection Modal */}
       {showMaterialModal && (
         <MaterialSelectionModal
-          onClose={() => setShowMaterialModal(false)}
-          onSelect={(material) => {
-            setMaterialType(material)
-            setShowMaterialModal(false)
-          }}
-        />
+        materials={romanBlindsMaterials}
+        title="Select Material for Custom Photo Roman Blinds"
+        subtitle="Choose the best fabric for your personalised roman blinds"
+        onClose={() => setShowMaterialModal(false)}
+        onSelect={(material) => {
+          setMaterialType(material)
+          setShowMaterialModal(false)
+        }}
+      />
       )}
     </div>
   )

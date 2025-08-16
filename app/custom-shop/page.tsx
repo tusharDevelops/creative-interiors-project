@@ -1,5 +1,5 @@
 "use client"
-import { Palette, Blinds, ImageIcon, Sparkles, Users, Award, Zap, Shield, Plus } from "lucide-react"
+import { Palette, Blinds, ImageIcon, Sparkles, Users, Award, Zap, Shield, Plus, DoorOpen } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import Link from "next/link"
@@ -13,7 +13,7 @@ const productCategories = [
       "Premium custom wallpapers with endless design possibilities. Upload your own image or choose from our designer collection.",
     icon: Palette,
     href: "/custom-shop/wallpaper",
-    image: "https://images.pexels.com/photos/6198657/pexels-photo-6198657.jpeg",
+    image: "/show/product-wallpaper.jpeg",
     popular: true,
     projects: "2,847",
     rating: 4.9,
@@ -29,7 +29,7 @@ const productCategories = [
     description: "Elegant window treatments for the perfect balance of privacy and natural light.",
     icon: Blinds,
     href: "/custom-shop/blinds",
-    image: "https://images.pexels.com/photos/279640/pexels-photo-279640.jpeg",
+    image: "/show/product-blinds.jpeg",
     popular: false,
     projects: "1,923",
     rating: 4.8,
@@ -45,7 +45,7 @@ const productCategories = [
     description: "Transform your favorite photos into stunning wall art with museum-quality canvas prints.",
     icon: ImageIcon,
     href: "/custom-shop/canvas",
-    image: "https://images.pexels.com/photos/8101544/pexels-photo-8101544.jpeg",
+    image: "/show/product-canvas.jpeg",
     popular: true,
     projects: "3,156",
     rating: 4.9,
@@ -61,7 +61,7 @@ const productCategories = [
     description: "Decorative and privacy films that add style while maintaining natural light flow.",
     icon: Sparkles,
     href: "/custom-shop/glass-film",
-    image: "https://images.pexels.com/photos/7676300/pexels-photo-7676300.jpeg",
+    image: "/show/product-glass-film.jpeg",
     popular: false,
     projects: "987",
     rating: 4.7,
@@ -70,6 +70,22 @@ const productCategories = [
     textColor: "text-gray-900",
     size: "large", // Takes 2 columns
   },
+  {
+    id: "Designer-curtains",
+    name: "Designer Curtains",
+    tagline: "Elevate your space.",
+    description: "Luxurious curtains that combine style and functionality.",
+    icon: Sparkles,
+    href: "/custom-shop/designer-curtains",
+    image: "/show/product-curtain.jpeg",
+    popular: false,
+    projects: "1,234",
+    rating: 4.8,
+    price: "From ₹150",
+    bgColor: "bg-gradient-to-br from-pink-50 to-rose-50",
+    textColor: "text-gray-900",
+    size: "large", // Takes 2 columns
+  }
 ]
 
 const features = [
@@ -98,6 +114,7 @@ const features = [
 export default function CustomShopPage() {
   return (
     <div className="min-h-screen bg-white">
+      
       <div className="w-full h-52 relative">
                 <Image
                   src="/products.jpg"
@@ -108,8 +125,8 @@ export default function CustomShopPage() {
                   className="object-cover" // or object-contain if needed
                 />
       
-              </div>
-
+      </div>
+      
       {/* Hero Section - Apple Style */}
       <section className="pt-12 pb-20 bg-white">
         <div className="max-w-7xl mx-auto px-6 text-center">
@@ -127,21 +144,25 @@ export default function CustomShopPage() {
 
           {/* Custom Products Highlight */}
           <div className="flex flex-wrap justify-center gap-4 mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-pink-100 text-pink-700 text-sm font-medium">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-pink-100 text-brand-pink text-sm font-medium">
               <Palette className="w-4 h-4" />
               Custom Wallpapers
             </div>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-100 text-cyan-700 text-sm font-medium">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full  text-brand-cyan text-sm font-medium">
               <Blinds className="w-4 h-4" />
               Personalized Blinds
             </div>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-lime-100 text-lime-700 text-sm font-medium">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-brand-green text-sm font-medium">
               <ImageIcon className="w-4 h-4" />
               Photo Canvas
             </div>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-100 text-orange-700 text-sm font-medium">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-brand-orange text-sm font-medium">
               <Sparkles className="w-4 h-4" />
               Designer Glass Films
+            </div>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-brand-blue text-sm font-medium">
+              <DoorOpen className="w-4 h-4" />
+              Designer Curtains
             </div>
           </div>
 
@@ -154,7 +175,8 @@ export default function CustomShopPage() {
         </div>
       </section>
 
-      {/* Apple-style Product Cards Grid */}
+      
+       {/* Apple-style Product Cards Grid */}
       <section className="pb-20">
         <div className="max-w-7xl mx-auto px-6">
           {/* First Row - Large Cards */}
@@ -196,7 +218,7 @@ export default function CustomShopPage() {
                       Premium custom wallpapers with endless design possibilities.
                     </p>
                     <div className="flex items-center justify-between">
-                      <div className="text-lg font-medium text-white">From ₹60 per sq ft</div>
+                      <div className="text-lg font-medium text-white">From $8.99 per sq ft</div>
                       <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
                         <Plus className="w-5 h-5 text-white" />
                       </div>
@@ -239,7 +261,7 @@ export default function CustomShopPage() {
                       Elegant solutions for the perfect balance of privacy and light.
                     </p>
                     <div className="flex items-center justify-between">
-                      <div className="text-lg font-medium text-white">From ₹100 per sq ft</div>
+                      <div className="text-lg font-medium text-white">From $12.99 per sq ft</div>
                       <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
                         <Plus className="w-5 h-5 text-white" />
                       </div>
@@ -288,7 +310,7 @@ export default function CustomShopPage() {
                       Museum-quality canvas prints that bring your photos to life.
                     </p>
                     <div className="flex items-center justify-between">
-                      <div className="text-lg font-medium text-white">From ₹200/sq ft </div>
+                      <div className="text-lg font-medium text-white">From $15.99</div>
                       <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
                         <Plus className="w-5 h-5 text-white" />
                       </div>
@@ -332,7 +354,7 @@ export default function CustomShopPage() {
                       Decorative films that add style while maintaining natural light.
                     </p>
                     <div className="flex items-center justify-between">
-                      <div className="text-lg font-medium text-white">From ₹70/sq ft</div>
+                      <div className="text-lg font-medium text-white">From $9.99</div>
                       <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
                         <Plus className="w-5 h-5 text-white" />
                       </div>
@@ -341,6 +363,45 @@ export default function CustomShopPage() {
                 </div>
               </div>
             </Link>
+          </div>
+
+          {/* Third Row - Medium Cards with Image Focus */}
+          <div className="grid lg:grid-cols-1 gap-6 mt-6">
+              <Link href={productCategories[4].href} className="group block">
+              <div className="rounded-3xl overflow-hidden h-[600px] relative transition-transform duration-300 group-hover:scale-[1.02] shadow-lg">
+                {/* Large Product Image */}
+                <div className="absolute inset-0">
+                  <Image
+                    src={productCategories[4].image || "/placeholder.svg"}
+                    alt={productCategories[4].name}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                </div>
+
+                {/*  content over image */}
+                <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                  <div>
+                    <div className="text-sm font-medium text-white/80 mb-2">Designer Curtains</div>
+                    <h2 className="text-3xl lg:text-4xl font-light text-white mb-3 leading-tight">
+                      Style that
+                      <br />
+                      transforms spaces.
+                    </h2>
+                    <p className="text-base text-white/90 max-w-md mb-6">
+                      Premium fabrics and elegant designs to elevate your home interiors.
+                    </p>
+                    <div className="flex flex-col gap-2">
+                      <div className="text-lg font-medium text-white">From $39.99</div>
+                      <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                        <Plus className="w-5 h-5 text-white" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Link>    
           </div>
         </div>
       </section>
@@ -371,8 +432,6 @@ export default function CustomShopPage() {
           </div>
         </div>
       </section>
-
-     
 
       {/* Apple-style CTA */}
       <section className="py-20 bg-gray-50">

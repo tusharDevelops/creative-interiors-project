@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { MaterialSelectionModal } from "@/components/MaterialSelectionModal"
 import Image from "next/image"
+import { rollerBlindsMaterials } from "@/utils/Material"
 
 // Mock design data - in real app this would come from API
 const designData = {
@@ -376,12 +377,15 @@ export default function RollerBlindsCatalogueCustomizePage({ params }: { params:
       {/* Material Selection Modal */}
       {showMaterialModal && (
         <MaterialSelectionModal
-          onClose={() => setShowMaterialModal(false)}
-          onSelect={(material) => {
-            setMaterialType(material)
-            setShowMaterialModal(false)
-          }}
-        />
+        materials={rollerBlindsMaterials}
+        title="Select Material"
+        subtitle="Choose from our premium roller blind material collection"
+        onClose={() => setShowMaterialModal(false)}
+        onSelect={(material) => {
+          setMaterialType(material)
+          setShowMaterialModal(false)
+        }}
+      />
       )}
     </div>
   )

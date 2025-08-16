@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { MaterialSelectionModal } from "@/components/MaterialSelectionModal"
 import Image from "next/image"
+import { verticalBlindsMaterials } from "@/utils/Material"
 
 
 // Mock design data - in real app this would come from API
@@ -373,6 +374,9 @@ export default function VerticalBlindsCatalogueCustomizePage({ params }: { param
       {/* Material Selection Modal */}
       {showMaterialModal && (
         <MaterialSelectionModal
+          materials={verticalBlindsMaterials}
+          title="Select Material"
+          subtitle="Choose from our premium vertical blind material collection"
           onClose={() => setShowMaterialModal(false)}
           onSelect={(material) => {
             setMaterialType(material)

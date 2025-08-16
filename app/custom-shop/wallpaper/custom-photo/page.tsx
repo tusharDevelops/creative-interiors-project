@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { MaterialSelectionModal } from "@/components/MaterialSelectionModal"
 import Link from "next/link"
 import Image from "next/image"
+import { wallpaperMaterials } from "@/utils/Material"
 
 export default function CustomWallpaperPage() {
   const [selectedSize, setSelectedSize] = useState("")
@@ -230,13 +231,16 @@ export default function CustomWallpaperPage() {
 
       {/* Material Selection Modal */}
       {showMaterialModal && (
-        <MaterialSelectionModal
-          onClose={() => setShowMaterialModal(false)}
-          onSelect={(material) => {
-            setMaterialType(material)
-            setShowMaterialModal(false)
-          }}
-        />
+       <MaterialSelectionModal
+        materials={wallpaperMaterials}
+        title="Select Material for Custom Photo Wallpaper"
+        subtitle="Choose the best material for your personalised wallpaper"
+        onClose={() => setShowMaterialModal(false)}
+        onSelect={(material) => {
+          setMaterialType(material)
+          setShowMaterialModal(false)
+        }}
+      />
       )}
     </div>
   )
