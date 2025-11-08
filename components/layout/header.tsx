@@ -18,7 +18,8 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Input } from "@/components/ui/input"
 import { Search, ShoppingCart, User, Heart, Menu, X, ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Spotlight } from "@/components/ui/spotlight"
+import { AuthModal } from "@/components/auth/auth-modal"
+import { UserAccountMenu } from "@/components/auth/user-account-menu"
 
 const mainNavItems = [
   {
@@ -49,8 +50,6 @@ const mainNavItems = [
         href: "/products/decor",
         description: "Find unique decor items to enhance your interiors.",
       },
-      
-      
     ],
   },
   {
@@ -88,7 +87,6 @@ const mainNavItems = [
     title: "Portfolio",
     href: "/portfolio",
   },
-  
   {
     title: "About",
     href: "/about",
@@ -99,13 +97,14 @@ const mainNavItems = [
   },
 ]
 
-
-export default function Header() {
+export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const pathname = usePathname()
   const [isSheetOpen, setIsSheetOpen] = useState(false)
-
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [user, setUser] = useState<any>(null)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -122,28 +121,37 @@ export default function Header() {
     }
   }, [])
 
+  const handleAuthSuccess = (userData: any) => {
+    setUser(userData)
+    setIsAuthenticated(true)
+  }
+
+  const handleLogout = () => {
+    setUser(null)
+    setIsAuthenticated(false)
+  }
+
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+        "fixed top-0 left-0 right-0 z-40 transition-all duration-300",
         isScrolled ? "bg-white/90 backdrop-blur-md shadow-md py-2" : "bg-transparent py-4",
       )}
     >
       <div className="container mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between">
-          {/* Logo edited  and fixedgir*/}
+          {/* Logo */}
           <Link href="/" className="flex items-center">
             <div className="relative">
-            <Image
-               priority
-              src={isScrolled ? "/images/logo4-min.png" : "/images/logo3-min.png"}
-              alt="Creative Interiors"
-              width={200}
-              height={150}
-              className="object-contain"
-            />
-          </div>
-
+              <Image
+                priority
+                src={isScrolled ? "/images/logo4-min.png" : "/images/logo3-min.png"}
+                alt="Creative Interiors"
+                width={200}
+                height={150}
+                className="object-contain"
+              />
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -156,7 +164,7 @@ export default function Header() {
                       <>
                         <NavigationMenuTrigger
                           className={cn(
-                            "text-sm  font-medium",
+                            "text-sm font-medium",
                             pathname === item.href ? "text-magenta" : isScrolled ? "text-gray-800" : "text-blue",
                             isScrolled ? "hover:text-magenta" : "hover:text-magenta/90",
                           )}
@@ -252,20 +260,24 @@ export default function Header() {
               <span className="sr-only">Cart</span>
             </Button>
 
-            {/* Account */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className={cn(
-                "rounded-full",
-                isScrolled
-                  ? "text-gray-800 hover:text-magenta hover:bg-gray-100"
-                  : "text-white hover:text-white hover:bg-white/10",
-              )}
-            >
-              <User className="h-5 w-5" />
-              <span className="sr-only">Account</span>
-            </Button>
+            {!isAuthenticated ? (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsAuthModalOpen(true)}
+                className={cn(
+                  "rounded-full",
+                  isScrolled
+                    ? "text-gray-800 hover:text-magenta hover:bg-gray-100"
+                    : "text-white hover:text-white hover:bg-white/10",
+                )}
+              >
+                <User className="h-5 w-5" />
+                <span className="sr-only">Account</span>
+              </Button>
+            ) : (
+              <UserAccountMenu user={user} onLogout={handleLogout} isScrolled={isScrolled} />
+            )}
 
             {/* Mobile menu */}
             <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
@@ -300,7 +312,7 @@ export default function Header() {
                       {mainNavItems.map((item) => (
                         <div key={item.title}>
                           {item.children ? (
-                             <MobileSubmenu item={item} onLinkClick={() => setIsSheetOpen(false)} />
+                            <MobileSubmenu item={item} onLinkClick={() => setIsSheetOpen(false)} />
                           ) : (
                             <Link
                               href={item.href}
@@ -319,10 +331,30 @@ export default function Header() {
                   </div>
                   <div className="mt-auto pt-6 border-t border-gray-200">
                     <div className="space-y-4">
-                      <Button className="w-full bg-magenta hover:bg-magenta/90">Sign In</Button>
-                      <Button variant="outline" className="w-full border-magenta text-magenta hover:bg-magenta/5">
-                        Create Account
-                      </Button>
+                      {!isAuthenticated ? (
+                        <>
+                          <Button
+                            onClick={() => {
+                              setIsSheetOpen(false)
+                              setIsAuthModalOpen(true)
+                            }}
+                            className="w-full bg-magenta hover:bg-magenta/90"
+                          >
+                            Sign In
+                          </Button>
+                        </>
+                      ) : (
+                        <Button
+                          onClick={() => {
+                            setIsSheetOpen(false)
+                            handleLogout()
+                          }}
+                          variant="outline"
+                          className="w-full border-magenta text-magenta hover:bg-magenta/5"
+                        >
+                          Logout
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -365,7 +397,7 @@ export default function Header() {
                 <h3 className="text-sm font-medium text-gray-500 mb-2">Popular Searches</h3>
                 <div className="flex flex-wrap gap-2">
                   {["Modern Furniture", "Lighting", "Kitchen Design", "Office Decor", "Minimalist"].map((term) => (
-                    <Button key={term} variant="outline" size="sm" className="rounded-full text-xs">
+                    <Button key={term} variant="outline" size="sm" className="rounded-full text-xs bg-transparent">
                       {term}
                     </Button>
                   ))}
@@ -376,8 +408,7 @@ export default function Header() {
         )}
       </AnimatePresence>
 
-      {/* Spotlight effect for non-scrolled state */}
-      {!isScrolled && <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="rgba(255,255,255,0.05)" />}
+      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} onAuthSuccess={handleAuthSuccess} />
     </header>
   )
 }
@@ -394,7 +425,6 @@ interface MobileSubmenuProps {
   }
   onLinkClick: () => void
 }
-
 
 function MobileSubmenu({ item, onLinkClick }: MobileSubmenuProps) {
   const [isOpen, setIsOpen] = useState(false)
@@ -419,14 +449,13 @@ function MobileSubmenu({ item, onLinkClick }: MobileSubmenuProps) {
             <div className="pl-4 py-2 space-y-2">
               {item.children?.map((child) => (
                 <Link
-                key={child.title}
-                href={child.href}
-                onClick={onLinkClick}
-                className="block py-2 text-gray-600 hover:text-magenta"
-              >
-                {child.title}
-              </Link>
-              
+                  key={child.title}
+                  href={child.href}
+                  onClick={onLinkClick}
+                  className="block py-2 text-gray-600 hover:text-magenta"
+                >
+                  {child.title}
+                </Link>
               ))}
             </div>
           </motion.div>
