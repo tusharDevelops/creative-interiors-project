@@ -11,35 +11,52 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { MaterialSelectionModal } from "@/components/MaterialSelectionModal"
 import Image from "next/image"
-import { rollerBlindsMaterials } from "@/utils/Material"
+//import { rollerBlindsMaterials } from "@/utils/Material"
+
+import { useEffect } from "react"
+import { useDispatch } from "react-redux"
+import { useParams } from "next/navigation"
+
+import {
+  getCatalogueById,
+  getCategoryBySlug,
+  getSelectableMaterials,
+} from "@/services/operations/productAPI"
+
+import { adaptCatalogue } from "@/adapters/catalogueAdapter"
+import { adaptMaterials } from "@/adapters/materialAdapter"
+import { Material } from "@/types/material"
+
+import { addToCart } from "@/services/operations/cartAPI"
+
 
 // Mock design data - in real app this would come from API
-const designData = {
-  1: {
-    name: "Modern Geometric Roller",
-    category: "Abstract",
-    price: 89.99,
-    image: "/placeholder.svg?height=400&width=400",
-    description: "Contemporary geometric pattern perfect for modern interiors with clean lines and bold shapes",
-    material: "Blackout",
-  },
-  2: {
-    name: "Tropical Leaves Roller",
-    category: "Nature",
-    price: 94.99,
-    image: "/placeholder.svg?height=400&width=400",
-    description: "Lush tropical foliage design bringing nature indoors with vibrant green tones",
-    material: "Light Filter",
-  },
-  3: {
-    name: "Minimalist Lines Roller",
-    category: "Modern",
-    price: 79.99,
-    image: "/placeholder.svg?height=400&width=400",
-    description: "Clean minimalist design with subtle lines perfect for contemporary spaces",
-    material: "Sunscreen",
-  },
-}
+// const designData = {
+//   1: {
+//     name: "Modern Geometric Roller",
+//     category: "Abstract",
+//     price: 89.99,
+//     image: "/placeholder.svg?height=400&width=400",
+//     description: "Contemporary geometric pattern perfect for modern interiors with clean lines and bold shapes",
+//     material: "Blackout",
+//   },
+//   2: {
+//     name: "Tropical Leaves Roller",
+//     category: "Nature",
+//     price: 94.99,
+//     image: "/placeholder.svg?height=400&width=400",
+//     description: "Lush tropical foliage design bringing nature indoors with vibrant green tones",
+//     material: "Light Filter",
+//   },
+//   3: {
+//     name: "Minimalist Lines Roller",
+//     category: "Modern",
+//     price: 79.99,
+//     image: "/placeholder.svg?height=400&width=400",
+//     description: "Clean minimalist design with subtle lines perfect for contemporary spaces",
+//     material: "Sunscreen",
+//   },
+// }
 
 const rollerBlindSizes = [
   { value: "custom", label: "Custom Size" },
@@ -66,17 +83,95 @@ const controlOptions = [
   { value: "motorized", label: "Motorized" },
 ]
 
-export default function RollerBlindsCatalogueCustomizePage({ params }: { params: { id: string } }) {
-  const [selectedSize, setSelectedSize] = useState("")
-  const [width, setWidth] = useState("")
-  const [height, setHeight] = useState("")
-  const [materialType, setMaterialType] = useState("")
-  const [fabricType, setFabricType] = useState("")
-  const [mountingType, setMountingType] = useState("")
-  const [controlType, setControlType] = useState("")
-  const [showMaterialModal, setShowMaterialModal] = useState(false)
+export default function RollerBlindsCatalogueCustomizePage() {
+ const params = useParams<{ id: string }>()
+const dispatch = useDispatch<any>()
 
-  const design = designData[1]
+const [design, setDesign] = useState<any>(null)
+const [materials, setMaterials] = useState<Material[]>([])
+const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null)
+
+const [selectedSize, setSelectedSize] = useState("")
+const [width, setWidth] = useState("")
+const [height, setHeight] = useState("")
+const [fabricType, setFabricType] = useState("")
+const [mountingType, setMountingType] = useState("")
+const [controlType, setControlType] = useState("")
+const [showMaterialModal, setShowMaterialModal] = useState(false)
+
+const handleAddToCart = async () => {
+  if (!design || !selectedMaterial || !width || !height) {
+    alert("Please complete all required options")
+    return
+  }
+
+  const configurationJson = JSON.stringify({
+    imageType: "CATALOGUE",
+    catalogueImage: design.image,
+
+    width,
+    height,
+    unit: "cm",
+
+    materialId: selectedMaterial.id,
+    materialName: selectedMaterial.name,
+
+    fabricType,
+    mountingType,
+    controlType,
+
+    category: "ROLLER_BLINDS_CATALOGUE",
+  })
+
+  await dispatch(
+    addToCart({
+      productType: "BLINDS",
+      productRefId: design.id, // 🔥 IMPORTANT
+      configurationJson,
+      quantity: 1,
+      unitPrice: design.price, // base price
+    })
+  )
+}
+
+useEffect(() => {
+  const loadCatalogue = async () => {
+    try {
+      const raw = await dispatch(getCatalogueById(params.id))
+      const adapted = adaptCatalogue(raw)
+      setDesign(adapted)
+    } catch (err) {
+      console.error("Failed to load roller blind catalogue", err)
+    }
+  }
+
+  if (params?.id) {
+    loadCatalogue()
+  }
+}, [params.id, dispatch])
+
+
+useEffect(() => {
+  const loadMaterials = async () => {
+    try {
+      const category = await dispatch(getCategoryBySlug("roller-blinds"))
+      if (!category?._id) return
+
+      const res = await dispatch(getSelectableMaterials(category._id))
+      setMaterials(adaptMaterials(res))
+      // console.log("Loaded materials:", adaptMaterials(res))
+    } catch (err) {
+      console.error("Failed to load roller blind materials", err)
+    }
+  }
+
+  loadMaterials()
+}, [dispatch])
+
+
+
+if (!design) return null
+
 
   return (
     <div className="min-h-screen bg-white">
@@ -241,7 +336,8 @@ export default function RollerBlindsCatalogueCustomizePage({ params }: { params:
                   className="w-full justify-between border-brand-pink text-brand-pink hover:bg-brand-pink/5 bg-transparent"
                   onClick={() => setShowMaterialModal(true)}
                 >
-                  {materialType || "Select Material Type"}
+                 {selectedMaterial ? selectedMaterial.name : "Select Material Type"}
+
                   <Info className="w-4 h-4" />
                 </Button>
               </CardContent>
@@ -362,10 +458,12 @@ export default function RollerBlindsCatalogueCustomizePage({ params }: { params:
                 <div className="grid grid-cols-2 gap-3 pt-4">
                   <Button
                     variant="outline"
+                    onClick={handleAddToCart}
                     className="border-brand-pink text-brand-pink hover:bg-brand-pink/5 bg-transparent"
                   >
                     Add to Cart
                   </Button>
+
                   <Button className="bg-brand-cyan hover:bg-brand-cyan/90 text-white">Order Now</Button>
                 </div>
               </CardContent>
@@ -375,18 +473,19 @@ export default function RollerBlindsCatalogueCustomizePage({ params }: { params:
       </div>
 
       {/* Material Selection Modal */}
-      {showMaterialModal && (
-        <MaterialSelectionModal
-        materials={rollerBlindsMaterials}
-        title="Select Material"
-        subtitle="Choose from our premium roller blind material collection"
-        onClose={() => setShowMaterialModal(false)}
-        onSelect={(material) => {
-          setMaterialType(material)
-          setShowMaterialModal(false)
-        }}
-      />
-      )}
+     {showMaterialModal && (
+  <MaterialSelectionModal
+    materials={materials}
+    title="Select Material"
+    subtitle="Choose from our premium roller blind material collection"
+    onClose={() => setShowMaterialModal(false)}
+    onSelect={(material) => {
+      setSelectedMaterial(material)
+      setShowMaterialModal(false)
+    }}
+  />
+)}
+
     </div>
   )
 }

@@ -1,3 +1,16 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+
+import {
+  getCategoryBySlug,
+  getCataloguesByCategory,
+} from "@/services/operations/productAPI"
+
+import { adaptCatalogueList } from "@/adapters/catalogueAdapter"
+
+
 import Link from "next/link"
 import { ArrowLeft, Search, Filter, Grid, List } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -7,58 +20,87 @@ import Image from "next/image"
 
 
 
-const verticalBlindDesigns = [
-  {
-    id: 1,
-    name: "Modern Stripe Vertical",
-    category: "Contemporary",
-    price: 124.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["trending", "stripes"],
-  },
-  {
-    id: 2,
-    name: "Textured Fabric Vertical",
-    category: "Texture",
-    price: 139.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["premium", "textured"],
-  },
-  {
-    id: 3,
-    name: "Neutral Tone Vertical",
-    category: "Classic",
-    price: 109.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["neutral", "versatile"],
-  },
-  {
-    id: 4,
-    name: "Bold Pattern Vertical",
-    category: "Statement",
-    price: 149.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["bold", "pattern"],
-  },
-  {
-    id: 5,
-    name: "Natural Weave Vertical",
-    category: "Natural",
-    price: 134.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["natural", "eco"],
-  },
-  {
-    id: 6,
-    name: "Metallic Finish Vertical",
-    category: "Modern",
-    price: 159.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["metallic", "luxury"],
-  },
-]
+// const verticalBlindDesigns = [
+//   {
+//     id: 1,
+//     name: "Modern Stripe Vertical",
+//     category: "Contemporary",
+//     price: 124.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["trending", "stripes"],
+//   },
+//   {
+//     id: 2,
+//     name: "Textured Fabric Vertical",
+//     category: "Texture",
+//     price: 139.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["premium", "textured"],
+//   },
+//   {
+//     id: 3,
+//     name: "Neutral Tone Vertical",
+//     category: "Classic",
+//     price: 109.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["neutral", "versatile"],
+//   },
+//   {
+//     id: 4,
+//     name: "Bold Pattern Vertical",
+//     category: "Statement",
+//     price: 149.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["bold", "pattern"],
+//   },
+//   {
+//     id: 5,
+//     name: "Natural Weave Vertical",
+//     category: "Natural",
+//     price: 134.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["natural", "eco"],
+//   },
+//   {
+//     id: 6,
+//     name: "Metallic Finish Vertical",
+//     category: "Modern",
+//     price: 159.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["metallic", "luxury"],
+//   },
+// ]
 
 export default function VerticalBlindsCataloguePage() {
+
+  const dispatch = useDispatch<any>()
+  const [designs, setDesigns] = useState<any[]>([])
+
+  useEffect(() => {
+  const loadCatalogues = async () => {
+    try {
+      // vertical-blinds category
+      const category = await dispatch(
+        getCategoryBySlug("vertical-blinds")
+      )
+
+      if (!category?._id) return
+
+      const res = await dispatch(
+        getCataloguesByCategory(category._id)
+      )
+
+      setDesigns(adaptCatalogueList(res))
+    } catch (err) {
+      console.error("Failed to load vertical blind catalogues", err)
+    }
+  }
+
+  loadCatalogues()
+}, [dispatch])
+
+
+
   return (
     <div className="min-h-screen bg-white">
       <div className="w-full h-52 relative">
@@ -125,7 +167,7 @@ export default function VerticalBlindsCataloguePage() {
 
         {/* Designs Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {verticalBlindDesigns.map((design, index) => (
+          {designs.map((design, index) => (
             <Card
               key={design.id}
               className="group overflow-hidden border border-gray-200 hover:border-brand-cyan/50 transition-all duration-300 hover:shadow-xl animate-fade-in bg-white"
@@ -139,7 +181,7 @@ export default function VerticalBlindsCataloguePage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute top-3 left-3">
-                  {design.tags.map((tag) => (
+                  {design.tags.map((tag: string) => (
                     <span
                       key={tag}
                       className="inline-block px-2 py-1 bg-brand-cyan text-white text-xs rounded-full mr-1 mb-1"

@@ -37,7 +37,13 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'd68pxkftt5390.cloudfront.net',
         pathname: '/**',
-      }
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.shutterstock.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   experimental: {

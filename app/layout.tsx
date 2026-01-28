@@ -1,3 +1,5 @@
+
+import { Toaster } from "sonner"
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
@@ -6,6 +8,7 @@ import {Header} from "@/components/layout/header"
 import Footer from "@/components/layout/footer"
 import { ThemeProvider } from "@/components/theme-provider"
 import PageWrapper from "@/components/layout/pageWrapper"
+
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -22,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en"  suppressHydrationWarning>
       <head>
   <meta charSet="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -62,19 +65,22 @@ export default function RootLayout({
 </head>
 
 <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          
-          <PageWrapper>
-          
-          <Header />
-          {children}
-          <Footer />
-          
-          {/* Add any additional components or elements here */}
-          </PageWrapper> {/* Wrap children */}
-         
-        </ThemeProvider>
+       <Providers>
+          {/* 🔐 Redux hydration */}
+          <AuthHydrator />
+
+          {/* 🚧 CLIENT BOUNDARY */}
+          <ClientProviders>
+            <PageWrapper>
+              <Header />
+              {children}
+              <Footer />
+            </PageWrapper>
+          </ClientProviders>
+
+        </Providers>
       </body>
+
     </html>
   )
 }
@@ -82,6 +88,10 @@ export default function RootLayout({
 
 
 import './globals.css'
+import { Providers } from "@/redux/providers"
+import AuthHydrator from "@/redux/authHydrater"
+import ClientProviders from "@/components/provider/clientProvider"
+
 
 
 

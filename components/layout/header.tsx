@@ -21,6 +21,11 @@ import { cn } from "@/lib/utils"
 import { AuthModal } from "@/components/auth/auth-modal"
 import { UserAccountMenu } from "@/components/auth/user-account-menu"
 
+import { useSelector, useDispatch } from "react-redux"
+import { logout } from "@/redux/slices/authSlice"
+import { RootState } from "@/redux/combinedReducer"
+
+
 const mainNavItems = [
   {
     title: "Home",
@@ -103,8 +108,19 @@ export function Header() {
   const pathname = usePathname()
   const [isSheetOpen, setIsSheetOpen] = useState(false)
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [user, setUser] = useState<any>(null)
+  // const [isAuthenticated, setIsAuthenticated] = useState(false)
+  // const [user, setUser] = useState<any>(null)
+  const dispatch = useDispatch()
+
+  const { user, token } = useSelector((state: any) => state.auth)
+
+  const isAuthenticated = Boolean(token && user)
+
+  const cartCount = useSelector(
+  (state: RootState) => state.cart.items.length
+)
+
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -121,15 +137,18 @@ export function Header() {
     }
   }, [])
 
-  const handleAuthSuccess = (userData: any) => {
-    setUser(userData)
-    setIsAuthenticated(true)
-  }
+  // const handleAuthSuccess = (userData: any) => {
+  //   setUser(userData)
+  //   setIsAuthenticated(true)
+  // }
 
   const handleLogout = () => {
-    setUser(null)
-    setIsAuthenticated(false)
-  }
+  localStorage.removeItem("token")
+  localStorage.removeItem("user")
+  dispatch(logout())
+}
+
+
 
   return (
     <header
@@ -243,7 +262,7 @@ export function Header() {
             </Button>
 
             {/* Cart */}
-            <Button
+            {/* <Button
               variant="ghost"
               size="icon"
               className={cn(
@@ -258,7 +277,31 @@ export function Header() {
                 3
               </span>
               <span className="sr-only">Cart</span>
-            </Button>
+            </Button> */}
+
+            <Link href="/cart">
+  <Button
+    variant="ghost"
+    size="icon"
+    className={cn(
+      "rounded-full relative",
+      isScrolled
+        ? "text-gray-800 hover:text-magenta hover:bg-gray-100"
+        : "text-white hover:text-white hover:bg-white/10",
+    )}
+  >
+    <ShoppingCart className="h-5 w-5" />
+
+    {cartCount > 0 && (
+      <span className="absolute -top-1 -right-1 bg-magenta text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+        {cartCount}
+      </span>
+    )}
+
+    <span className="sr-only">Cart</span>
+  </Button>
+</Link>
+
 
             {!isAuthenticated ? (
               <Button
@@ -408,7 +451,7 @@ export function Header() {
         )}
       </AnimatePresence>
 
-      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} onAuthSuccess={handleAuthSuccess} />
+      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)}  />
     </header>
   )
 }

@@ -11,14 +11,33 @@ import { Textarea } from "@/components/ui/textarea"
 import { MaterialSelectionModal } from "@/components/MaterialSelectionModal"
 import Link from "next/link"
 import Image from "next/image"
-import { wallpaperMaterials } from "@/utils/Material"
+
+
+
+import { useEffect } from "react"
+import type { Material } from "@/types/material"
+import { adaptMaterials } from "@/adapters/materialAdapter"
+import { getCategoryBySlug, getSelectableMaterials } from "@/services/operations/productAPI"
+import { useDispatch } from "react-redux"
+import { addToCart } from "@/services/operations/cartAPI"
+
 
 export default function CustomWallpaperPage() {
-  const [selectedSize, setSelectedSize] = useState("")
-  const [width, setWidth] = useState("")
-  const [height, setHeight] = useState("")
-  const [materialType, setMaterialType] = useState("")
-  const [showMaterialModal, setShowMaterialModal] = useState(false)
+const [imageUrl, setImageUrl] = useState("")
+const [width, setWidth] = useState("")
+const [height, setHeight] = useState("")
+const [selectedSize, setSelectedSize] = useState("")
+const [showMaterialModal, setShowMaterialModal] = useState(false)
+
+const [materials, setMaterials] = useState<Material[]>([])
+const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null)
+
+
+const dispatch = useDispatch<any>()
+
+  
+
+
 
   const wallpaperSizes = [
     { value: "custom", label: "Custom Size" },
@@ -26,7 +45,65 @@ export default function CustomWallpaperPage() {
     { value: "standard-2", label: "Standard Size 2" },
   ]
 
+
+useEffect(() => {
+  const loadWallpaperMaterials = async () => {
+    try {
+      const category = await dispatch(getCategoryBySlug("wallpaper"));
+      if (!category?._id) return;
+
+      const apiMaterials = await dispatch(
+        getSelectableMaterials(category._id)
+      );
+
+      setMaterials(adaptMaterials(apiMaterials));
+      console.log("Loaded wallpaper materials:", apiMaterials);
+    } catch (err) {
+      console.error("Failed to load wallpaper materials", err);
+    }
+  };
+
+  loadWallpaperMaterials();
+}, [dispatch]);
+
+
+
+const handleAddToCart =  async() => {
+  if (!imageUrl || !selectedMaterial || !width || !height) {
+    alert("Please complete all required fields")
+    return
+  }
+
+  const configurationJson = JSON.stringify({
+    imageType: "EXTERNAL_URL",
+    imageUrl,
+    width,
+    height,
+    unit: "in",
+    materialId: selectedMaterial.id,
+    materialName: selectedMaterial.name,
+    category: "WALLPAPER_CUSTOM",
+  })
+
+  await dispatch(
+    addToCart({
+      productType: "WALLPAPER",
+      productRefId: "CUSTOM-WALLPAPER",
+      configurationJson,
+      quantity: 1,
+      unitPrice: selectedMaterial.price, // or pricePerSqFt if exists
+    })
+  )
+
+
+}
+
+
+
+
+
   return (
+
     <div className="min-h-screen bg-gray-50">
       <div className="w-full h-52 relative">
                 <Image
@@ -64,41 +141,59 @@ export default function CustomWallpaperPage() {
           {/* Left Side - Preview */}
           <div className="space-y-6">
             {/* Live Preview */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-brand-pink">
-                  <div className="w-2 h-2 bg-brand-pink rounded-full"></div>
-                  Live Preview
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="aspect-[4/3] bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
-                  <div className="text-center text-gray-500">
-                    <Upload className="w-12 h-12 mx-auto mb-2" />
-                    <p>Preview will appear here</p>
-                    <p className="text-sm">Upload an image to see preview</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-brand-pink">
+                    <div className="w-2 h-2 bg-brand-pink rounded-full"></div>
+                    Live Preview
+                  </CardTitle>
+                </CardHeader>
+
+                <CardContent>
+  <div className="relative aspect-[4/3] bg-gray-100 rounded-lg overflow-hidden">
+    {imageUrl ? (
+      <Image
+        src={imageUrl}
+        alt="Wallpaper Preview"
+        fill
+        className="object-cover"
+      />
+    ) : (
+      <div className="flex flex-col items-center justify-center h-full text-gray-500">
+        <Upload className="w-10 h-10 mb-2" />
+        <p>Paste image URL to preview</p>
+      </div>
+    )}
+  </div>
+</CardContent>
+
+              </Card>
+
 
             {/* Upload Section */}
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-brand-pink">
-                  <div className="w-2 h-2 bg-brand-pink rounded-full"></div>
-                  Upload Your Image
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="border-2 border-dashed border-brand-pink/30 rounded-lg p-8 text-center hover:border-brand-pink/50 transition-colors cursor-pointer">
-                  <Upload className="w-12 h-12 mx-auto mb-4 text-brand-pink" />
-                  <p className="text-lg font-medium mb-2">Drop your image here</p>
-                  <p className="text-sm text-muted-foreground mb-4">or click to browse</p>
-                  <Button className="bg-brand-pink hover:bg-brand-pink/90 text-white">Browse</Button>
-                </div>
-              </CardContent>
-            </Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-brand-pink">
+                      <div className="w-2 h-2 bg-brand-pink rounded-full"></div>
+                      Image Source
+                    </CardTitle>
+                  </CardHeader>
+
+                  <CardContent className="space-y-3">
+                    <Label>Paste Image URL</Label>
+
+                    <Input
+                      placeholder="https://images.unsplash.com/..."
+                      value={imageUrl}
+                      onChange={(e) => setImageUrl(e.target.value)}
+                    />
+
+                    <p className="text-xs text-gray-500">
+                      Shutterstock / Unsplash / Adobe Stock / Pexels
+                    </p>
+                  </CardContent>
+          </Card>
+
           </div>
 
           {/* Right Side - Form */}
@@ -167,7 +262,7 @@ export default function CustomWallpaperPage() {
                   className="w-full justify-between border-brand-pink text-brand-pink hover:bg-brand-pink/5 bg-transparent"
                   onClick={() => setShowMaterialModal(true)}
                 >
-                  {materialType || "Select Material Type"}
+                  {selectedMaterial ? selectedMaterial.name : "Select Material Type"}
                   <Info className="w-4 h-4" />
                 </Button>
               </CardContent>
@@ -215,12 +310,13 @@ export default function CustomWallpaperPage() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 pt-4">
-                  <Button
-                    variant="outline"
-                    className="border-brand-pink text-brand-pink hover:bg-brand-pink/5 bg-transparent"
-                  >
-                    Add to Cart
-                  </Button>
+                 <Button
+                  onClick={handleAddToCart}
+                  className="border-brand-pink text-brand-pink"
+                >
+                  Add to Cart
+                </Button>
+
                   <Button className="bg-brand-cyan hover:bg-brand-cyan/90 text-white">Order Now</Button>
                 </div>
               </CardContent>
@@ -230,18 +326,20 @@ export default function CustomWallpaperPage() {
       </div>
 
       {/* Material Selection Modal */}
-      {showMaterialModal && (
-       <MaterialSelectionModal
-        materials={wallpaperMaterials}
+        {showMaterialModal && (
+      <MaterialSelectionModal
+        materials={materials}
         title="Select Material for Custom Photo Wallpaper"
         subtitle="Choose the best material for your personalised wallpaper"
         onClose={() => setShowMaterialModal(false)}
         onSelect={(material) => {
-          setMaterialType(material)
-          setShowMaterialModal(false)
-        }}
+        setSelectedMaterial(material);
+        setShowMaterialModal(false);
+      }}
+
       />
-      )}
+    )}
+
     </div>
   )
 }

@@ -3,33 +3,19 @@
 import { X, Star, Shield, Droplets, Flame, Leaf } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { Material } from "@/types/material"
 
-interface MaterialSpec {
-  key: string
-  value: string
-}
 
-interface Material {
-  id: number
-  name: string
-  code: string
-  price: number
-  rating: number
-  category: string
-  description: string
-  features: string[]
-  image: string
-  badge: string
-  specs: MaterialSpec[]
-}
+
 
 
 interface MaterialDetailsModalProps {
   material: Material
   onClose: () => void
+  onSelect: (material: Material) => void   // ✅ ADD THIS
 }
 
-export function MaterialDetailsModal({ material, onClose }: MaterialDetailsModalProps) {
+export function MaterialDetailsModal({ material, onClose, onSelect }: MaterialDetailsModalProps) {
   const getFeatureIcon = (feature: string) => {
     switch (feature) {
       case "Water":
@@ -198,7 +184,11 @@ export function MaterialDetailsModal({ material, onClose }: MaterialDetailsModal
                 >
                   Close
                 </Button>
-                <Button className="flex-1 bg-brand-pink hover:bg-brand-pink/90 text-white">Select Material</Button>
+                <Button className="flex-1 bg-brand-pink hover:bg-brand-pink/90 text-white"
+                onClick={() => {
+      onSelect(material)   // ✅ select material
+      onClose()            // ✅ close modal
+    }}>Select Material</Button>
               </div>
             </div>
           </div>

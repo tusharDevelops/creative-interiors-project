@@ -1,6 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+import { useParams } from "next/navigation"
+
+import { getCatalogueById } from "@/services/operations/productAPI"
+import { adaptCatalogue } from "@/adapters/catalogueAdapter"
+
 import { ArrowLeft, Palette, Ruler, Frame, ShoppingCart, MessageSquare, Star, Info } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -12,6 +18,8 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import Link from "next/link"
 import Image from "next/image"
+import { addToCart } from "@/services/operations/cartAPI"
+
 
 const canvasSizes = [
   { value: "8x10", label: '8" × 10"', price: 25 },
@@ -44,14 +52,82 @@ export default function CanvasCatalogueCustomization() {
   const [selectedFrame, setSelectedFrame] = useState("none")
   const [quantity, setQuantity] = useState(1)
 
-  const catalogueDesign = {
-    id: 1,
-    title: "Abstract Geometric Art",
-    image: "/placeholder.svg?height=400&width=400",
-    category: "Modern Art",
-    rating: 4.8,
-    reviews: 124,
+  const dispatch = useDispatch<any>()
+const params = useParams<{ id: string }>()
+
+const [design, setDesign] = useState<any>(null)
+
+const handleAddToCart = async () => {
+  if (!design) return
+
+  // resolve final size
+  let width = ""
+  let height = ""
+
+  if (selectedSize === "custom") {
+    if (!customWidth || !customHeight) {
+      alert("Please enter custom dimensions")
+      return
+    }
+    width = customWidth
+    height = customHeight
+  } else {
+    const [w, h] = selectedSize.split("x")
+    width = w
+    height = h
   }
+
+  const configurationJson = JSON.stringify({
+    imageType: "CATALOGUE",
+    catalogueImage: design.image,
+    catalogueId: design.id,
+    designName: design.title,
+
+    size: selectedSize,
+    width,
+    height,
+    unit: "in",
+
+    finish: selectedFinish,
+    frame: selectedFrame,
+
+    category: "CANVAS_CATALOGUE",
+  })
+
+  await dispatch(
+    addToCart({
+      productType: "CANVAS",
+      productRefId: design.id,
+      configurationJson,
+      quantity,
+      unitPrice: calculatePrice() / quantity, // per unit
+    })
+  )
+}
+
+
+useEffect(() => {
+  const loadCanvasDesign = async () => {
+    const raw = await dispatch(getCatalogueById(params.id))
+    setDesign(adaptCatalogue(raw))
+    //console.log("Loaded design:", raw)
+  }
+
+  if (params?.id) loadCanvasDesign()
+}, [params.id, dispatch])
+
+if (!design) return null
+
+
+
+  // const catalogueDesign = {
+  //   id: 1,
+  //   title: "Abstract Geometric Art",
+  //   image: "/placeholder.svg?height=400&width=400",
+  //   category: "Modern Art",
+  //   rating: 4.8,
+  //   reviews: 124,
+  // }
 
   const calculatePrice = () => {
     const basePrice =
@@ -91,7 +167,7 @@ export default function CanvasCatalogueCustomization() {
               </Link>
               <div>
                 <h1 className="text-xl font-semibold text-gray-900">Customize Canvas</h1>
-                <p className="text-sm text-gray-500">{catalogueDesign.title}</p>
+                <p className="text-sm text-gray-500">{design.title}</p>
               </div>
             </div>
             <Badge variant="secondary" className="bg-blue-50 text-blue-700">
@@ -109,8 +185,8 @@ export default function CanvasCatalogueCustomization() {
               <CardContent className="p-0">
                 <div className="aspect-square bg-gray-100 relative">
                   <Image
-                    src={catalogueDesign.image || "/placeholder.svg"}
-                    alt={catalogueDesign.title}
+                    src={design.image || "/placeholder.svg"}
+                    alt="image"
                     fill
                     className="object-cover"
                   />
@@ -126,13 +202,13 @@ export default function CanvasCatalogueCustomization() {
               <CardContent className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">{catalogueDesign.title}</h3>
-                    <p className="text-sm text-gray-500">{catalogueDesign.category}</p>
+                    <h3 className="text-lg font-semibold text-gray-900">{design.title}</h3>
+                    <p className="text-sm text-gray-500">{design.category}</p>
                   </div>
                   <div className="flex items-center space-x-1">
                     <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    <span className="text-sm font-medium">{catalogueDesign.rating}</span>
-                    <span className="text-sm text-gray-500">({catalogueDesign.reviews})</span>
+                    <span className="text-sm font-medium">{design.rating}</span>
+                    <span className="text-sm text-gray-500">({design.reviews})</span>
                   </div>
                 </div>
                 <p className="text-sm text-gray-600">
@@ -349,7 +425,7 @@ export default function CanvasCatalogueCustomization() {
                       <MessageSquare className="h-4 w-4 mr-2" />
                       Get Quote
                     </Button>
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                    <Button className="w-full bg-blue-600 hover:bg-blue-700" onClick={handleAddToCart}>
                       <ShoppingCart className="h-4 w-4 mr-2" />
                       Add to Cart
                     </Button>

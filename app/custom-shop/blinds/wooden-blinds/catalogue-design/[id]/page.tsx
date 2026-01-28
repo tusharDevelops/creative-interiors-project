@@ -10,41 +10,49 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import Image from "next/image"
+import { useEffect } from "react"
+import { useDispatch } from "react-redux"
+import { useParams } from "next/navigation"
+
+import { getCatalogueById } from "@/services/operations/productAPI"
+import { adaptCatalogue } from "@/adapters/catalogueAdapter"
+import { addToCart } from "@/services/operations/cartAPI"
+
 
 
 // Mock design data - in real app this would come from API
-const designData = {
-  1: {
-    name: "Classic Oak Wooden",
-    category: "Traditional",
-    price: 189.99,
-    image: "/placeholder.svg?height=400&width=400",
-    description: "Premium oak wooden blinds with natural grain finish for timeless elegance",
-    finish: "Non-metallic",
-    bladeSize: "35mm",
-    woodType: "Oak",
-  },
-  2: {
-    name: "Metallic Walnut Wooden",
-    category: "Premium",
-    price: 229.99,
-    image: "/placeholder.svg?height=400&width=400",
-    description: "Luxurious walnut wooden blinds with metallic finish for sophisticated interiors",
-    finish: "Metallic",
-    bladeSize: "50mm",
-    woodType: "Walnut",
-  },
-  3: {
-    name: "Natural Pine Wooden",
-    category: "Rustic",
-    price: 159.99,
-    image: "/placeholder.svg?height=400&width=400",
-    description: "Rustic pine wooden blinds with natural finish perfect for country-style homes",
-    finish: "Non-metallic",
-    bladeSize: "25mm",
-    woodType: "Pine",
-  },
-}
+// const designData = {
+//   1: {
+//     name: "Classic Oak Wooden",
+//     category: "Traditional",
+//     price: 189.99,
+//     image: "/placeholder.svg?height=400&width=400",
+//     description: "Premium oak wooden blinds with natural grain finish for timeless elegance",
+//     finish: "Non-metallic",
+//     bladeSize: "35mm",
+//     woodType: "Oak",
+//   },
+//   2: {
+//     name: "Metallic Walnut Wooden",
+//     category: "Premium",
+//     price: 229.99,
+//     image: "/placeholder.svg?height=400&width=400",
+//     description: "Luxurious walnut wooden blinds with metallic finish for sophisticated interiors",
+//     finish: "Metallic",
+//     bladeSize: "50mm",
+//     woodType: "Walnut",
+//   },
+//   3: {
+//     name: "Natural Pine Wooden",
+//     category: "Rustic",
+//     price: 159.99,
+//     image: "/placeholder.svg?height=400&width=400",
+//     description: "Rustic pine wooden blinds with natural finish perfect for country-style homes",
+//     finish: "Non-metallic",
+//     bladeSize: "25mm",
+//     woodType: "Pine",
+//   },
+// }
 
 const woodenBlindSizes = [
   { value: "custom", label: "Custom Size" },
@@ -77,7 +85,7 @@ const controlOptions = [
   { value: "motorized", label: "Motorized" },
 ]
 
-export default function WoodenBlindsCatalogueCustomizePage({ params }: { params: { id: string } }) {
+export default function WoodenBlindsCatalogueCustomizePage() {
   const [selectedSize, setSelectedSize] = useState("")
   const [width, setWidth] = useState("")
   const [height, setHeight] = useState("")
@@ -85,8 +93,76 @@ export default function WoodenBlindsCatalogueCustomizePage({ params }: { params:
   const [finishType, setFinishType] = useState("")
   const [mountingType, setMountingType] = useState("")
   const [controlType, setControlType] = useState("")
+  const [specialNotes, setSpecialNotes] = useState("")
+  const dispatch = useDispatch<any>()
+const params = useParams<{ id: string }>()
 
-  const design =  designData[1]
+const [design, setDesign] = useState<any>(null)
+
+const handleAddToCart = async () => {
+  if (
+    !design ||
+    !width ||
+    !height ||
+    !bladeSize ||
+    !finishType ||
+    !mountingType ||
+    !controlType
+  ) {
+    alert("Please complete all required fields")
+    return
+  }
+
+  const configurationJson = JSON.stringify({
+    imageType: "CATALOGUE",
+    catalogueId: design.id,
+    catalogueImage: design.image,
+
+    width,
+    height,
+    unit: "cm",
+
+    bladeSize,
+    finishType,
+    mountingType,
+    controlType,
+
+    woodType: design.woodType,
+    finish: design.finish,
+
+    specialNotes,
+    category: "WOODEN_BLINDS_CATALOGUE",
+  })
+
+  await dispatch(
+    addToCart({
+      productType: "BLINDS",
+      productRefId: "CATALOGUE-WOODEN-BLINDS",
+      configurationJson,
+      quantity: 1,
+      unitPrice: design.price,
+    })
+  )
+}
+
+
+useEffect(() => {
+  const loadCatalogue = async () => {
+    if (!params?.id) return
+
+    const raw = await dispatch(getCatalogueById(params.id))
+    setDesign(adaptCatalogue(raw))
+  }
+
+  loadCatalogue()
+}, [params.id, dispatch])
+
+  if (!design) {
+    return <div>Loading...</div>
+  }
+
+
+  
 
   return (
     <div className="min-h-screen bg-white">
@@ -161,7 +237,7 @@ export default function WoodenBlindsCatalogueCustomizePage({ params }: { params:
               <CardContent className="p-6 space-y-3">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Design ID:</span>
-                  <span className="font-medium">WOD}</span>
+                  <span className="font-medium">WOD</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Wood Type:</span>
@@ -332,11 +408,14 @@ export default function WoodenBlindsCatalogueCustomizePage({ params }: { params:
               <CardContent className="pt-6 space-y-4">
                 <div>
                   <Label htmlFor="special-notes">Special Notes</Label>
-                  <Textarea
-                    id="special-notes"
-                    placeholder="Any special requirements or notes..."
-                    className="min-h-[80px] border-2 border-gray-200 hover:border-amber-500 transition-colors"
-                  />
+                 <Textarea
+                  id="special-notes"
+                  placeholder="Any special requirements or notes..."
+                  value={specialNotes}
+                  onChange={(e) => setSpecialNotes(e.target.value)}
+                  className="min-h-[80px] border-2 border-gray-200 hover:border-amber-500 transition-colors"
+                />
+
                 </div>
               </CardContent>
             </Card>
@@ -377,12 +456,14 @@ export default function WoodenBlindsCatalogueCustomizePage({ params }: { params:
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 pt-4">
-                  <Button
-                    variant="outline"
-                    className="border-amber-600 text-amber-600 hover:bg-amber-600/5 bg-transparent"
-                  >
-                    Add to Cart
-                  </Button>
+               <Button
+                onClick={handleAddToCart}
+                variant="outline"
+                className="border-amber-600 text-amber-600 hover:bg-amber-600/5 bg-transparent"
+              >
+                Add to Cart
+              </Button>
+
                   <Button className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-orange-600 hover:to-amber-600 text-white">
                     Order Now
                   </Button>

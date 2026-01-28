@@ -3,90 +3,96 @@ import { Palette, Blinds, ImageIcon, Sparkles, Users, Award, Zap, Shield, Plus, 
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import Link from "next/link"
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { getProductCategories } from "@/services/operations/productAPI";
+import { adaptCategories } from "@/adapters/productCategoryAdapter";
 
-const productCategories = [
-  {
-    id: "wallpaper",
-    name: "Custom Wallpaper",
-    tagline: "Transform your walls.",
-    description:
-      "Premium custom wallpapers with endless design possibilities. Upload your own image or choose from our designer collection.",
-    icon: Palette,
-    href: "/custom-shop/wallpaper",
-    image: "/show/product-wallpaper.jpeg",
-    popular: true,
-    projects: "2,847",
-    rating: 4.9,
-    price: "From ₹60",
-    bgColor: "bg-gradient-to-br from-orange-50 to-pink-50",
-    textColor: "text-gray-900",
-    size: "large", // Takes 2 columns
-  },
-  {
-    id: "blinds",
-    name: "Window Blinds",
-    tagline: "Privacy meets style.",
-    description: "Elegant window treatments for the perfect balance of privacy and natural light.",
-    icon: Blinds,
-    href: "/custom-shop/blinds",
-    image: "/show/product-blinds.jpeg",
-    popular: false,
-    projects: "1,923",
-    rating: 4.8,
-    price: "From ₹70",
-    bgColor: "bg-gradient-to-br from-slate-900 to-slate-800",
-    textColor: "text-white",
-    size: "medium",
-  },
-  {
-    id: "canvas",
-    name: "Canvas Prints",
-    tagline: "Your memories, elevated.",
-    description: "Transform your favorite photos into stunning wall art with museum-quality canvas prints.",
-    icon: ImageIcon,
-    href: "/custom-shop/canvas",
-    image: "/show/product-canvas.jpeg",
-    popular: true,
-    projects: "3,156",
-    rating: 4.9,
-    price: "From ₹200",
-    bgColor: "bg-gradient-to-br from-emerald-50 to-teal-50",
-    textColor: "text-gray-900",
-    size: "medium",
-  },
-  {
-    id: "glass-film",
-    name: "Glass Films",
-    tagline: "Modern privacy solutions.",
-    description: "Decorative and privacy films that add style while maintaining natural light flow.",
-    icon: Sparkles,
-    href: "/custom-shop/glass-film",
-    image: "/show/product-glass-film.jpeg",
-    popular: false,
-    projects: "987",
-    rating: 4.7,
-    price: "From ₹60",
-    bgColor: "bg-gradient-to-br from-sky-100 to-blue-100",
-    textColor: "text-gray-900",
-    size: "large", // Takes 2 columns
-  },
-  {
-    id: "Designer-curtains",
-    name: "Designer Curtains",
-    tagline: "Elevate your space.",
-    description: "Luxurious curtains that combine style and functionality.",
-    icon: Sparkles,
-    href: "/custom-shop/designer-curtains",
-    image: "/show/product-curtain.jpeg",
-    popular: false,
-    projects: "1,234",
-    rating: 4.8,
-    price: "From ₹150",
-    bgColor: "bg-gradient-to-br from-pink-50 to-rose-50",
-    textColor: "text-gray-900",
-    size: "large", // Takes 2 columns
-  }
-]
+
+
+// const productCategories = [
+//   {
+//     id: "wallpaper",
+//     name: "Custom Wallpaper",
+//     tagline: "Transform your walls.",
+//     description:
+//       "Premium custom wallpapers with endless design possibilities. Upload your own image or choose from our designer collection.",
+//     icon: Palette,
+//     href: "/custom-shop/wallpaper",
+//     image: "/show/product-wallpaper.jpeg",
+//     popular: true,
+//     projects: "2,847",
+//     rating: 4.9,
+//     price: "From ₹60",
+//     bgColor: "bg-gradient-to-br from-orange-50 to-pink-50",
+//     textColor: "text-gray-900",
+//     size: "large", // Takes 2 columns
+//   },
+//   {
+//     id: "blinds",
+//     name: "Window Blinds",
+//     tagline: "Privacy meets style.",
+//     description: "Elegant window treatments for the perfect balance of privacy and natural light.",
+//     icon: Blinds,
+//     href: "/custom-shop/blinds",
+//     image: "/show/product-blinds.jpeg",
+//     popular: false,
+//     projects: "1,923",
+//     rating: 4.8,
+//     price: "From ₹70",
+//     bgColor: "bg-gradient-to-br from-slate-900 to-slate-800",
+//     textColor: "text-white",
+//     size: "medium",
+//   },
+//   {
+//     id: "canvas",
+//     name: "Canvas Prints",
+//     tagline: "Your memories, elevated.",
+//     description: "Transform your favorite photos into stunning wall art with museum-quality canvas prints.",
+//     icon: ImageIcon,
+//     href: "/custom-shop/canvas",
+//     image: "/show/product-canvas.jpeg",
+//     popular: true,
+//     projects: "3,156",
+//     rating: 4.9,
+//     price: "From ₹200",
+//     bgColor: "bg-gradient-to-br from-emerald-50 to-teal-50",
+//     textColor: "text-gray-900",
+//     size: "medium",
+//   },
+//   {
+//     id: "glass-film",
+//     name: "Glass Films",
+//     tagline: "Modern privacy solutions.",
+//     description: "Decorative and privacy films that add style while maintaining natural light flow.",
+//     icon: Sparkles,
+//     href: "/custom-shop/glass-film",
+//     image: "/show/product-glass-film.jpeg",
+//     popular: false,
+//     projects: "987",
+//     rating: 4.7,
+//     price: "From ₹60",
+//     bgColor: "bg-gradient-to-br from-sky-100 to-blue-100",
+//     textColor: "text-gray-900",
+//     size: "large", // Takes 2 columns
+//   },
+//   {
+//     id: "Designer-curtains",
+//     name: "Designer Curtains",
+//     tagline: "Elevate your space.",
+//     description: "Luxurious curtains that combine style and functionality.",
+//     icon: Sparkles,
+//     href: "/custom-shop/designer-curtains",
+//     image: "/show/product-curtain.jpeg",
+//     popular: false,
+//     projects: "1,234",
+//     rating: 4.8,
+//     price: "From ₹150",
+//     bgColor: "bg-gradient-to-br from-pink-50 to-rose-50",
+//     textColor: "text-gray-900",
+//     size: "large", // Takes 2 columns
+//   }
+// ]
 
 const features = [
   {
@@ -111,7 +117,33 @@ const features = [
   },
 ]
 
+
+
+
 export default function CustomShopPage() {
+
+    const [productCategories, setProductCategories] = useState<any[]>([]);
+  const dispatch = useDispatch<any>();
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      const apiData = await dispatch(getProductCategories());
+      const adapted = adaptCategories(apiData);
+      setProductCategories(adapted);
+      console.log(" api-data:", apiData);
+    };
+
+    loadCategories();
+  }, [dispatch]);
+
+  if (productCategories.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Loading products…</p>
+      </div>
+    );
+  }
+  
   return (
     <div className="min-h-screen bg-white">
       

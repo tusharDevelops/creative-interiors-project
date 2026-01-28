@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link"
 import { ArrowLeft, Search, Filter, Grid, List } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -5,58 +6,93 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import Image from "next/image"
 
-const romanBlindDesigns = [
-  {
-    id: 1,
-    name: "Elegant Damask Roman",
-    category: "Classic",
-    price: 164.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["elegant", "damask"],
-  },
-  {
-    id: 2,
-    name: "Linen Texture Roman",
-    category: "Natural",
-    price: 149.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["linen", "natural"],
-  },
-  {
-    id: 3,
-    name: "Floral Pattern Roman",
-    category: "Traditional",
-    price: 174.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["floral", "traditional"],
-  },
-  {
-    id: 4,
-    name: "Contemporary Geometric Roman",
-    category: "Modern",
-    price: 159.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["geometric", "modern"],
-  },
-  {
-    id: 5,
-    name: "Silk Finish Roman",
-    category: "Luxury",
-    price: 199.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["silk", "luxury"],
-  },
-  {
-    id: 6,
-    name: "Botanical Print Roman",
-    category: "Nature",
-    price: 154.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["botanical", "green"],
-  },
-]
+
+import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+
+import { getCategoryBySlug, getCataloguesByCategory } from "@/services/operations/productAPI"
+import { adaptCatalogueList } from "@/adapters/catalogueAdapter"
+
+
+// const romanBlindDesigns = [
+//   {
+//     id: 1,
+//     name: "Elegant Damask Roman",
+//     category: "Classic",
+//     price: 164.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["elegant", "damask"],
+//   },
+//   {
+//     id: 2,
+//     name: "Linen Texture Roman",
+//     category: "Natural",
+//     price: 149.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["linen", "natural"],
+//   },
+//   {
+//     id: 3,
+//     name: "Floral Pattern Roman",
+//     category: "Traditional",
+//     price: 174.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["floral", "traditional"],
+//   },
+//   {
+//     id: 4,
+//     name: "Contemporary Geometric Roman",
+//     category: "Modern",
+//     price: 159.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["geometric", "modern"],
+//   },
+//   {
+//     id: 5,
+//     name: "Silk Finish Roman",
+//     category: "Luxury",
+//     price: 199.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["silk", "luxury"],
+//   },
+//   {
+//     id: 6,
+//     name: "Botanical Print Roman",
+//     category: "Nature",
+//     price: 154.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["botanical", "green"],
+//   },
+// ]
 
 export default function RomanBlindsCataloguePage() {
+
+  const dispatch = useDispatch<any>()
+const [designs, setDesigns] = useState<any[]>([])
+
+useEffect(() => {
+  const loadCatalogues = async () => {
+    try {
+      const category = await dispatch(getCategoryBySlug("roman-blinds"))
+      if (!category?._id) return
+
+      const res = await dispatch(
+        getCataloguesByCategory(category._id)
+      )
+
+      setDesigns(adaptCatalogueList(res))
+    } catch (err) {
+      console.error("Failed to load roman blind catalogues", err)
+    }
+  }
+
+  loadCatalogues()
+}, [dispatch])
+
+if (!designs.length) return null
+
+
+
   return (
     <div className="min-h-screen bg-white">
       <div className="w-full h-52 relative">
@@ -123,7 +159,7 @@ export default function RomanBlindsCataloguePage() {
 
         {/* Designs Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {romanBlindDesigns.map((design, index) => (
+          {designs.map((design, index) => (
             <Card
               key={design.id}
               className="group overflow-hidden border border-gray-200 hover:border-brand-cyan/50 transition-all duration-300 hover:shadow-xl animate-fade-in bg-white"
@@ -137,7 +173,7 @@ export default function RomanBlindsCataloguePage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute top-3 left-3">
-                  {design.tags.map((tag) => (
+                  {design.tags.map((tag: string) => (
                     <span
                       key={tag}
                       className="inline-block px-2 py-1 bg-brand-cyan text-white text-xs rounded-full mr-1 mb-1"

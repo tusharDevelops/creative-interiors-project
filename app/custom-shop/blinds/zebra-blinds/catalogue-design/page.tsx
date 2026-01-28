@@ -1,3 +1,14 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+
+import {
+  getCategoryBySlug,
+  getCataloguesByCategory,
+} from "@/services/operations/productAPI"
+
+import { adaptCatalogueList } from "@/adapters/catalogueAdapter"
 import Link from "next/link"
 import { ArrowLeft, Search, Filter, Grid, List } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -5,58 +16,85 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import Image from "next/image"
 
-const zebraBlindDesigns = [
-  {
-    id: 1,
-    name: "Classic White Zebra",
-    category: "Minimalist",
-    price: 94.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["classic", "white"],
-  },
-  {
-    id: 2,
-    name: "Gray Stripe Zebra",
-    category: "Contemporary",
-    price: 104.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["gray", "modern"],
-  },
-  {
-    id: 3,
-    name: "Beige Tone Zebra",
-    category: "Neutral",
-    price: 99.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["beige", "neutral"],
-  },
-  {
-    id: 4,
-    name: "Textured Zebra",
-    category: "Premium",
-    price: 119.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["textured", "premium"],
-  },
-  {
-    id: 5,
-    name: "Blackout Zebra",
-    category: "Functional",
-    price: 129.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["blackout", "privacy"],
-  },
-  {
-    id: 6,
-    name: "Sheer Zebra",
-    category: "Light",
-    price: 89.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["sheer", "light"],
-  },
-]
+
+
+// const zebraBlindDesigns = [
+//   {
+//     id: 1,
+//     name: "Classic White Zebra",
+//     category: "Minimalist",
+//     price: 94.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["classic", "white"],
+//   },
+//   {
+//     id: 2,
+//     name: "Gray Stripe Zebra",
+//     category: "Contemporary",
+//     price: 104.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["gray", "modern"],
+//   },
+//   {
+//     id: 3,
+//     name: "Beige Tone Zebra",
+//     category: "Neutral",
+//     price: 99.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["beige", "neutral"],
+//   },
+//   {
+//     id: 4,
+//     name: "Textured Zebra",
+//     category: "Premium",
+//     price: 119.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["textured", "premium"],
+//   },
+//   {
+//     id: 5,
+//     name: "Blackout Zebra",
+//     category: "Functional",
+//     price: 129.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["blackout", "privacy"],
+//   },
+//   {
+//     id: 6,
+//     name: "Sheer Zebra",
+//     category: "Light",
+//     price: 89.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["sheer", "light"],
+//   },
+// ]
 
 export default function ZebraBlindsCataloguePage() {
+  const dispatch = useDispatch<any>()
+
+const [designs, setDesigns] = useState<any[]>([])
+
+useEffect(() => {
+  const loadCatalogue = async () => {
+    try {
+      const category = await dispatch(
+        getCategoryBySlug("zebra-blinds")
+      )
+      if (!category?._id) return
+
+      const res = await dispatch(
+        getCataloguesByCategory(category._id)
+      )
+
+      setDesigns(adaptCatalogueList(res))
+    } catch (err) {
+      console.error("Failed to load zebra catalogue", err)
+    }
+  }
+
+  loadCatalogue()
+}, [dispatch])
+
   return (
     <div className="min-h-screen bg-white">
       <div className="w-full h-52 relative">
@@ -123,7 +161,7 @@ export default function ZebraBlindsCataloguePage() {
 
         {/* Designs Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {zebraBlindDesigns.map((design, index) => (
+          {designs.map((design, index) => (
             <Card
               key={design.id}
               className="group overflow-hidden border border-gray-200 hover:border-brand-cyan/50 transition-all duration-300 hover:shadow-xl animate-fade-in bg-white"
@@ -137,7 +175,7 @@ export default function ZebraBlindsCataloguePage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute top-3 left-3">
-                  {design.tags.map((tag) => (
+                  {design.tags.map((tag: string) => (
                     <span
                       key={tag}
                       className="inline-block px-2 py-1 bg-brand-cyan text-white text-xs rounded-full mr-1 mb-1"

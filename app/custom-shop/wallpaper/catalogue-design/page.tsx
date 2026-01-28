@@ -1,62 +1,88 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
 import Link from "next/link"
-import { ArrowLeft, Search, Filter, Grid, List } from "lucide-react"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { getCategoryBySlug, getCataloguesByCategory } from "@/services/operations/productAPI"
+import { adaptCatalogueList } from "@/adapters/catalogueAdapter"
+import { ArrowLeft, Filter, Grid, List, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
-import Image from "next/image"
 
-const catalogueDesigns = [
-  {
-    id: 1,
-    name: "Modern Geometric",
-    category: "Abstract",
-    price: 6.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["trending", "modern"],
-  },
-  {
-    id: 2,
-    name: "Tropical Leaves",
-    category: "Nature",
-    price: 7.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["popular", "botanical"],
-  },
-  {
-    id: 3,
-    name: "Art Deco Gold",
-    category: "Vintage",
-    price: 8.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["luxury", "gold"],
-  },
-  {
-    id: 4,
-    name: "Minimalist Lines",
-    category: "Modern",
-    price: 6.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["minimal", "clean"],
-  },
-  {
-    id: 5,
-    name: "Floral Vintage",
-    category: "Classic",
-    price: 7.49,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["classic", "floral"],
-  },
-  {
-    id: 6,
-    name: "Industrial Brick",
-    category: "Texture",
-    price: 8.49,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["industrial", "texture"],
-  },
-]
+// const catalogueDesigns = [
+//   {
+//     id: 1,
+//     name: "Modern Geometric",
+//     category: "Abstract",
+//     price: 6.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["trending", "modern"],
+//   },
+//   {
+//     id: 2,
+//     name: "Tropical Leaves",
+//     category: "Nature",
+//     price: 7.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["popular", "botanical"],
+//   },
+//   {
+//     id: 3,
+//     name: "Art Deco Gold",
+//     category: "Vintage",
+//     price: 8.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["luxury", "gold"],
+//   },
+//   {
+//     id: 4,
+//     name: "Minimalist Lines",
+//     category: "Modern",
+//     price: 6.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["minimal", "clean"],
+//   },
+//   {
+//     id: 5,
+//     name: "Floral Vintage",
+//     category: "Classic",
+//     price: 7.49,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["classic", "floral"],
+//   },
+//   {
+//     id: 6,
+//     name: "Industrial Brick",
+//     category: "Texture",
+//     price: 8.49,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["industrial", "texture"],
+//   },
+// ]
 
 export default function CataloguePage() {
+ 
+   const dispatch = useDispatch<any>()
+  const [designs, setDesigns] = useState<any[]>([])
+
+  useEffect(() => {
+    const loadCatalogues = async () => {
+      const category = await dispatch(getCategoryBySlug("wallpaper"))
+      if (!category?._id) return
+
+      const raw = await dispatch(
+        getCataloguesByCategory(category._id)
+      )
+
+      setDesigns(adaptCatalogueList(raw))
+    }
+
+    loadCatalogues()
+  }, [dispatch])
+
+  if (!designs.length) return null
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <div className="w-full h-52 relative">
@@ -125,7 +151,7 @@ export default function CataloguePage() {
 
         {/* Designs Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {catalogueDesigns.map((design, index) => (
+          {designs.map((design, index) => (
             <Card
               key={design.id}
               className="group overflow-hidden border-2 border-transparent hover:border-brand-cyan/50 transition-all duration-300 hover:shadow-xl animate-fade-in"
@@ -139,7 +165,7 @@ export default function CataloguePage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute top-3 left-3">
-                  {design.tags.map((tag) => (
+                  {design.tags.map((tag: string) => (
                     <span
                       key={tag}
                       className="inline-block px-2 py-1 bg-brand-cyan text-white text-xs rounded-full mr-1 mb-1"

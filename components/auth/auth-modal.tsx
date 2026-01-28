@@ -7,18 +7,22 @@ import { OtpStep } from "../auth-steps/otp-step"
 import { RegisterStep } from "../auth-steps/register-step"
 import { SuccessStep } from "../auth-steps/success-step"
 import { X } from "lucide-react"
+import { useDispatch } from "react-redux"
+import { sendOtp, verifyOtp, onboardUser } from "@/services/operations/authAPI"
+
 
 interface AuthModalProps {
   isOpen: boolean
   onClose: () => void
-  onAuthSuccess: (userData: any) => void
 }
 
-export function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalProps) {
+export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [step, setStep] = useState<"email" | "otp" | "register" | "success">("email")
   const [email, setEmail] = useState("")
   const [isNewUser, setIsNewUser] = useState(false)
   const [userData, setUserData] = useState<any>(null)
+  const dispatch = useDispatch<any>()
+
 
   useEffect(() => {
     if (!isOpen) {
@@ -29,36 +33,50 @@ export function AuthModal({ isOpen, onClose, onAuthSuccess }: AuthModalProps) {
     }
   }, [isOpen])
 
-  const handleEmailSubmit = async (emailValue: string) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    setEmail(emailValue)
-    setStep("otp")
-  }
+  const handleEmailSubmit = async (emailValue: string): Promise<void> => {
+  setEmail(emailValue)
+  await dispatch(
+    sendOtp(emailValue, () => {
+      setStep("otp")
+    })
+  )
+}
 
-  const handleOtpSubmit = async (otp: string) => {
-    const emailValue = email
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    const registered = emailValue === "devtesta9211@gmail.com"
-    setIsNewUser(!registered)
 
-    if (registered) {
-      setUserData({ email, name: "Test User", phone: "9876543210" })
+
+  const handleOtpSubmit = async (otp: string): Promise<void> => {
+  await dispatch(
+    verifyOtp(email, otp, (nextRoute: string) => {
+      if (nextRoute === "/onboarding") {
+        setIsNewUser(true)
+        setStep("register")
+      } else {
+        setIsNewUser(false)
+        setStep("success")
+      }
+    })
+  )
+}
+
+
+
+ const handleRegisterSubmit = async (
+  data: { name: string; phone: string }
+): Promise<void> => {
+  await dispatch(
+    onboardUser(data.name, data.phone, () => {
+      setUserData({ email, ...data })
       setStep("success")
-    } else {
-      setStep("register")
-    }
-  }
+    })
+  )
+}
 
-  const handleRegisterSubmit = async (data: any) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    setUserData({ email, ...data })
-    setStep("success")
-  }
+
 
   const handleSuccess = () => {
-    onAuthSuccess({ email, ...userData })
-    onClose()
-  }
+  onClose()
+}
+
 
   const handleTryAnother = () => {
     setStep("email")

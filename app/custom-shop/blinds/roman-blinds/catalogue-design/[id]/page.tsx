@@ -11,33 +11,49 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { MaterialSelectionModal } from "@/components/MaterialSelectionModal"
 import Image from "next/image"
-import { romanBlindsMaterials } from "@/utils/Material"
+//import { romanBlindsMaterials } from "@/utils/Material"
+
+import { useEffect } from "react"
+import { useDispatch } from "react-redux"
+import { useParams } from "next/navigation"
+
+import {
+  getCatalogueById,
+  getCategoryBySlug,
+  getSelectableMaterials,
+} from "@/services/operations/productAPI"
+
+import { adaptCatalogue } from "@/adapters/catalogueAdapter"
+import { adaptMaterials } from "@/adapters/materialAdapter"
+import type { Material } from "@/types/material"
+import { addToCart } from "@/services/operations/cartAPI"
+
 
 
 // Mock design data - in real app this would come from API
-const designData = {
-  1: {
-    name: "Elegant Damask Roman",
-    category: "Classic",
-    price: 164.99,
-    image: "/placeholder.svg?height=400&width=400",
-    description: "Sophisticated damask pattern roman blind with elegant fabric folds perfect for traditional interiors",
-  },
-  2: {
-    name: "Linen Texture Roman",
-    category: "Natural",
-    price: 149.99,
-    image: "/placeholder.svg?height=400&width=400",
-    description: "Natural linen texture roman blind bringing organic warmth to your space",
-  },
-  3: {
-    name: "Floral Pattern Roman",
-    category: "Traditional",
-    price: 174.99,
-    image: "/placeholder.svg?height=400&width=400",
-    description: "Beautiful floral pattern roman blind for a timeless traditional look",
-  },
-}
+// const designData = {
+//   1: {
+//     name: "Elegant Damask Roman",
+//     category: "Classic",
+//     price: 164.99,
+//     image: "/placeholder.svg?height=400&width=400",
+//     description: "Sophisticated damask pattern roman blind with elegant fabric folds perfect for traditional interiors",
+//   },
+//   2: {
+//     name: "Linen Texture Roman",
+//     category: "Natural",
+//     price: 149.99,
+//     image: "/placeholder.svg?height=400&width=400",
+//     description: "Natural linen texture roman blind bringing organic warmth to your space",
+//   },
+//   3: {
+//     name: "Floral Pattern Roman",
+//     category: "Traditional",
+//     price: 174.99,
+//     image: "/placeholder.svg?height=400&width=400",
+//     description: "Beautiful floral pattern roman blind for a timeless traditional look",
+//   },
+// }
 
 const romanBlindSizes = [
   { value: "custom", label: "Custom Size" },
@@ -69,18 +85,96 @@ const controlOptions = [
   { value: "motorized", label: "Motorized" },
 ]
 
-export default function RomanBlindsCatalogueCustomizePage({ params }: { params: { id: string } }) {
+export default function RomanBlindsCatalogueCustomizePage() {
   const [selectedSize, setSelectedSize] = useState("")
   const [width, setWidth] = useState("")
   const [height, setHeight] = useState("")
-  const [materialType, setMaterialType] = useState("")
+  const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null)
+
   const [foldStyle, setFoldStyle] = useState("")
   const [liningType, setLiningType] = useState("")
   const [mountingType, setMountingType] = useState("")
   const [controlType, setControlType] = useState("")
   const [showMaterialModal, setShowMaterialModal] = useState(false)
 
-  const design =  designData[1]
+  const params = useParams<{ id: string }>()
+  const dispatch = useDispatch<any>()
+
+  const [design, setDesign] = useState<any>(null)
+  const [materials, setMaterials] = useState<Material[]>([])
+
+  const handleAddToCart = async () => {
+    if (!design || !selectedMaterial || !width || !height) {
+      alert("Please complete all required options")
+      return
+    }
+  
+    const configurationJson = JSON.stringify({
+      imageType: "CATALOGUE",
+      catalogueImage: design.image,
+  
+      width,
+      height,
+      unit: "cm",
+  
+      materialId: selectedMaterial.id,
+      materialName: selectedMaterial.name,
+  
+      mountingType,
+      controlType,
+
+      category: "ROMAN_BLINDS_CATALOGUE",
+    })
+  
+    await dispatch(
+     addToCart({
+        productType: "BLINDS",
+        productRefId: design.id, // 🔥 IMPORTANT
+        configurationJson,
+        quantity: 1,
+        unitPrice: design.price, // base price
+      })
+    )
+  }
+
+  useEffect(() => {
+  const loadCatalogue = async () => {
+    try {
+      const raw = await dispatch(getCatalogueById(params.id))
+      const adapted = adaptCatalogue(raw)
+      setDesign(adapted)
+    } catch (err) {
+      console.error("Failed to load roman catalogue", err)
+    }
+  }
+
+  if (params?.id) loadCatalogue()
+}, [params.id, dispatch])
+
+
+useEffect(() => {
+  const loadMaterials = async () => {
+    try {
+      const category = await dispatch(getCategoryBySlug("roman-blinds"))
+      if (!category?._id) return
+
+      const res = await dispatch(
+        getSelectableMaterials(category._id)
+      )
+
+      setMaterials(adaptMaterials(res))
+     // console.log("Loaded materials:", adaptMaterials(res))
+    } catch (err) {
+      console.error("Failed to load roman materials", err)
+    }
+  }
+
+  loadMaterials()
+}, [dispatch])
+
+if (!design) return null
+
+
 
   return (
     <div className="min-h-screen bg-white">
@@ -245,7 +339,8 @@ export default function RomanBlindsCatalogueCustomizePage({ params }: { params: 
                   className="w-full justify-between border-brand-pink text-brand-pink hover:bg-brand-pink/5 bg-transparent"
                   onClick={() => setShowMaterialModal(true)}
                 >
-                  {materialType || "Select Material Type"}
+                  {selectedMaterial ? selectedMaterial.name : "Select Material Type"}
+
                   <Info className="w-4 h-4" />
                 </Button>
               </CardContent>
@@ -387,8 +482,9 @@ export default function RomanBlindsCatalogueCustomizePage({ params }: { params: 
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 pt-4">
-                  <Button
+                   <Button
                     variant="outline"
+                    onClick={handleAddToCart}
                     className="border-brand-pink text-brand-pink hover:bg-brand-pink/5 bg-transparent"
                   >
                     Add to Cart
@@ -404,15 +500,16 @@ export default function RomanBlindsCatalogueCustomizePage({ params }: { params: 
       {/* Material Selection Modal */}
       {showMaterialModal && (
         <MaterialSelectionModal
-        materials={romanBlindsMaterials}
-        title="Select Material"
-        subtitle="Choose from our premium roman blind fabric collection"
-        onClose={() => setShowMaterialModal(false)}
-        onSelect={(material) => {
-          setMaterialType(material)
-          setShowMaterialModal(false)
-        }}
-      />
+  materials={materials}
+  title="Select Material"
+  subtitle="Choose from our premium roman blind fabric collection"
+  onClose={() => setShowMaterialModal(false)}
+  onSelect={(material) => {
+    setSelectedMaterial(material)
+    setShowMaterialModal(false)
+  }}
+/>
+
       )}
     </div>
   )

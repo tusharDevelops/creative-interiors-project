@@ -1,67 +1,106 @@
+"use client"
+
 import Link from "next/link"
 import { ArrowLeft, Search, Filter, Grid, List } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import Image from "next/image"
-const rollerBlindDesigns = [
-  {
-    id: 1,
-    name: "Modern Geometric Roller",
-    category: "Abstract",
-    price: 89.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["trending", "modern"],
-    material: "Blackout",
-  },
-  {
-    id: 2,
-    name: "Tropical Leaves Roller",
-    category: "Nature",
-    price: 94.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["popular", "botanical"],
-    material: "Light Filter",
-  },
-  {
-    id: 3,
-    name: "Minimalist Lines Roller",
-    category: "Modern",
-    price: 79.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["minimal", "clean"],
-    material: "Sunscreen",
-  },
-  {
-    id: 4,
-    name: "Vintage Floral Roller",
-    category: "Classic",
-    price: 99.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["classic", "floral"],
-    material: "Blackout",
-  },
-  {
-    id: 5,
-    name: "Industrial Texture Roller",
-    category: "Industrial",
-    price: 104.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["industrial", "texture"],
-    material: "Thermal",
-  },
-  {
-    id: 6,
-    name: "Ocean Waves Roller",
-    category: "Nature",
-    price: 89.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["calming", "blue"],
-    material: "Light Filter",
-  },
-]
+
+import {
+  getCategoryBySlug,
+  getCataloguesByCategory,
+} from "@/services/operations/productAPI"
+import {  adaptCatalogueList } from "@/adapters/catalogueAdapter"
+import { useDispatch } from "react-redux"
+import { useEffect, useState } from "react"
+// const rollerBlindDesigns = [
+//   {
+//     id: 1,
+//     name: "Modern Geometric Roller",
+//     category: "Abstract",
+//     price: 89.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["trending", "modern"],
+//     material: "Blackout",
+//   },
+//   {
+//     id: 2,
+//     name: "Tropical Leaves Roller",
+//     category: "Nature",
+//     price: 94.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["popular", "botanical"],
+//     material: "Light Filter",
+//   },
+//   {
+//     id: 3,
+//     name: "Minimalist Lines Roller",
+//     category: "Modern",
+//     price: 79.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["minimal", "clean"],
+//     material: "Sunscreen",
+//   },
+//   {
+//     id: 4,
+//     name: "Vintage Floral Roller",
+//     category: "Classic",
+//     price: 99.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["classic", "floral"],
+//     material: "Blackout",
+//   },
+//   {
+//     id: 5,
+//     name: "Industrial Texture Roller",
+//     category: "Industrial",
+//     price: 104.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["industrial", "texture"],
+//     material: "Thermal",
+//   },
+//   {
+//     id: 6,
+//     name: "Ocean Waves Roller",
+//     category: "Nature",
+//     price: 89.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["calming", "blue"],
+//     material: "Light Filter",
+//   },
+// ]
 
 export default function RollerBlindsCataloguePage() {
+  const dispatch = useDispatch<any>()
+  const [designs, setDesigns] = useState<any[]>([])
+
+  useEffect(() => {
+    const loadCatalogues = async () => {
+      try {
+        // 1️⃣ roller-blinds category
+        const category = await dispatch(
+          getCategoryBySlug("roller-blinds")
+        )
+        if (!category?._id) return
+
+        // 2️⃣ catalogues under roller-blinds
+        const raw = await dispatch(
+          getCataloguesByCategory(category._id)
+        )
+
+        // 3️⃣ adapt for UI
+        setDesigns(adaptCatalogueList(raw))
+      } catch (err) {
+        console.error("Failed to load roller blind catalogues", err)
+      }
+    }
+
+    loadCatalogues()
+  }, [dispatch])
+
+  if (!designs.length) return null
+  
   return (
     <div className="min-h-screen bg-white">
       <div className="w-full h-52 relative">
@@ -128,7 +167,7 @@ export default function RollerBlindsCataloguePage() {
 
         {/* Designs Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {rollerBlindDesigns.map((design, index) => (
+          {designs.map((design, index) => (
             <Card
               key={design.id}
               className="group overflow-hidden border border-gray-200 hover:border-brand-cyan/50 transition-all duration-300 hover:shadow-xl animate-fade-in bg-white"
@@ -142,7 +181,7 @@ export default function RollerBlindsCataloguePage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute top-3 left-3">
-                  {design.tags.map((tag) => (
+                  {design.tags.map((tag: string) => (
                     <span
                       key={tag}
                       className="inline-block px-2 py-1 bg-brand-cyan text-white text-xs rounded-full mr-1 mb-1"

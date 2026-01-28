@@ -44,7 +44,7 @@ export default function CanvasPage() {
 
         {/* Main Options */}
         <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-        <CustomCard
+        {/* <CustomCard
           title="Custom Photo Canvas"
           description="Upload your own image and transform it into a premium canvas print. Perfect for personal photos, artwork, or branded designs."
           features={[
@@ -70,7 +70,7 @@ export default function CanvasPage() {
             icon: Shield,
           }}
           delay="0s"
-        />
+        /> */}
 
         <CustomCard
           title="Catalogue Canvas Designs"

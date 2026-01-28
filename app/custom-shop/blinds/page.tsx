@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowLeft } from "lucide-react"
@@ -5,72 +6,105 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import ImageCarousel from "@/components/image-carousel"
 
-const blindTypes = [
-  {
-    id: "roller-blinds",
-    name: "Roller Blinds",
-    description: "Simple, elegant, and versatile window covering with smooth operation",
-    images: [
-      "/1-roller.jpeg",
-      "/2-roller.jpeg",
-      "/3-roller.jpeg",
-      "/4-roller.jpeg",
-    ],
-    href: "/custom-shop/blinds/roller-blinds",
-  },
-  {
-    id: "zebra-blinds",
-    name: "Zebra Blinds",
-    description: "Alternating sheer and opaque stripes for perfect light control",
-    images: [
-      "/zebra-1.jpeg",
-      "/zebra-2.jpeg",
-      "/zebra-3.jpeg",
-      "/zebra-4.jpeg",
-      "/zebra-5.jpeg",
-    ],
-    href: "/custom-shop/blinds/zebra-blinds",
-  },
-  {
-    id: "vertical-blinds",
-    name: "Vertical Blinds",
-    description: "Perfect for large windows and sliding doors with vertical slats",
-    images: [
-      "/vertical-1.jpeg",
-      "/vertical-2.jpeg",
-      "/vertical-3.jpeg",
-      "/vertical-4.jpeg",
-    ],
-    href: "/custom-shop/blinds/vertical-blinds",
-  },
-  {
-    id: "roman-blinds",
-    name: "Roman Blinds",
-    description: "Soft fabric folds for an elegant and sophisticated appearance",
-    images: [
-      "/roman-1.jpeg",
-      "/roman-2.jpeg",
-      "/roman-3.jpeg",
-      "/roman-4.jpeg",
-      "/roman-5.jpeg",
-    ],
-    href: "/custom-shop/blinds/roman-blinds",
-  },
-  {
-    id: "wooden-blinds",
-    name: "Wooden Blinds",
-    description: "Natural wood finish for a warm, classic look with premium craftsmanship",
-    images: [
-      "/wood-1.jpeg",
-      "/wood-2.jpeg",
-      "/wood-3.jpeg",
-      "/wood-4.jpeg",
-    ],
-    href: "/custom-shop/blinds/wooden-blinds",
-  },
-]
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { getCategoryBySlug, getSubCategories } from "@/services/operations/productAPI";
+import { adaptBlindCategories } from "@/adapters/blindsAdapter";
+
+
+// const blindTypes = [
+//   {
+//     id: "roller-blinds",
+//     name: "Roller Blinds",
+//     description: "Simple, elegant, and versatile window covering with smooth operation",
+//     images: [
+//       "/1-roller.jpeg",
+//       "/2-roller.jpeg",
+//       "/3-roller.jpeg",
+//       "/4-roller.jpeg",
+//     ],
+//     href: "/custom-shop/blinds/roller-blinds",
+//   },
+//   {
+//     id: "zebra-blinds",
+//     name: "Zebra Blinds",
+//     description: "Alternating sheer and opaque stripes for perfect light control",
+//     images: [
+//       "/zebra-1.jpeg",
+//       "/zebra-2.jpeg",
+//       "/zebra-3.jpeg",
+//       "/zebra-4.jpeg",
+//       "/zebra-5.jpeg",
+//     ],
+//     href: "/custom-shop/blinds/zebra-blinds",
+//   },
+//   {
+//     id: "vertical-blinds",
+//     name: "Vertical Blinds",
+//     description: "Perfect for large windows and sliding doors with vertical slats",
+//     images: [
+//       "/vertical-1.jpeg",
+//       "/vertical-2.jpeg",
+//       "/vertical-3.jpeg",
+//       "/vertical-4.jpeg",
+//     ],
+//     href: "/custom-shop/blinds/vertical-blinds",
+//   },
+//   {
+//     id: "roman-blinds",
+//     name: "Roman Blinds",
+//     description: "Soft fabric folds for an elegant and sophisticated appearance",
+//     images: [
+//       "/roman-1.jpeg",
+//       "/roman-2.jpeg",
+//       "/roman-3.jpeg",
+//       "/roman-4.jpeg",
+//       "/roman-5.jpeg",
+//     ],
+//     href: "/custom-shop/blinds/roman-blinds",
+//   },
+//   {
+//     id: "wooden-blinds",
+//     name: "Wooden Blinds",
+//     description: "Natural wood finish for a warm, classic look with premium craftsmanship",
+//     images: [
+//       "/wood-1.jpeg",
+//       "/wood-2.jpeg",
+//       "/wood-3.jpeg",
+//       "/wood-4.jpeg",
+//     ],
+//     href: "/custom-shop/blinds/wooden-blinds",
+//   },
+// ]
 
 export default function BlindsPage() {
+const [blindTypes, setBlindTypes] = useState<any[]>([]);
+const dispatch = useDispatch<any>();
+
+  useEffect(() => {
+    const loadBlinds = async () => {
+      // 1. get blinds category
+      const blindsCategory = await dispatch(
+        getCategoryBySlug("blinds")
+      );
+
+      // 2. get its children
+      const subCategories = await dispatch(
+        getSubCategories(blindsCategory._id)
+      );
+
+      // 3. adapt for UI
+      const adapted = adaptBlindCategories(subCategories);
+      setBlindTypes(adapted);
+      
+    };
+
+    loadBlinds();
+  }, [dispatch]);
+
+  if (blindTypes.length === 0) return null;
+
+
   return (
     <div className="min-h-screen bg-white">
       <div className="w-full h-52 relative">
@@ -166,16 +200,7 @@ export default function BlindsPage() {
         </div>
       </div>
 
-        {/* Bottom Info */}
-        <div className="text-center mt-16 animate-fade-in" style={{ animationDelay: "0.8s" }}>
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-green/10 text-brand-green text-sm font-medium mb-4">
-            Free Measurement & Installation Service
-          </div>
-          <p className="text-muted-foreground max-w-md mx-auto">
-            All our blinds come with professional measurement, installation, and a 2-year warranty for your peace of
-            mind.
-          </p>
-        </div>
+        
       </div>
     </div>
   )

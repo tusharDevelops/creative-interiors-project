@@ -11,40 +11,139 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import Image from "next/image"
 import { MaterialSelectionModal } from "@/components/MaterialSelectionModal"
-import { wallpaperMaterials } from "@/utils/Material"
-// Mock design data - in real app this would come from API
-const designData = {
-  1: {
-    name: "Modern Geometric",
-    category: "Abstract",
-    price: 6.99,
-    image: "/placeholder.svg?height=400&width=400",
-    description: "A contemporary geometric pattern perfect for modern interiors",
-  },
-  2: {
-    name: "Tropical Leaves",
-    category: "Nature",
-    price: 7.99,
-    image: "/placeholder.svg?height=400&width=400",
-    description: "Lush tropical foliage design bringing nature indoors",
-  },
-}
 
 
-export default function CatalogueCustomizePage({ params }: { params: { id: string } }) {
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getCatalogueById } from "@/services/operations/productAPI";
+import { adaptCatalogue } from "@/adapters/catalogueAdapter";
+import { Material } from "@/types/material"
+import { getCategoryBySlug, getSelectableMaterials } from "@/services/operations/productAPI"
+import { adaptMaterials } from "@/adapters/materialAdapter"
+import { useParams } from "next/navigation"
+import { addToCart } from "@/services/operations/cartAPI";
+
+
+// // Mock design data - in real app this would come from API
+// const designData = {
+//   1: {
+//     name: "Modern Geometric",
+//     category: "Abstract",
+//     price: 6.99,
+//     image: "/placeholder.svg?height=400&width=400",
+//     description: "A contemporary geometric pattern perfect for modern interiors",
+//   },
+//   2: {
+//     name: "Tropical Leaves",
+//     category: "Nature",
+//     price: 7.99,
+//     image: "/placeholder.svg?height=400&width=400",
+//     description: "Lush tropical foliage design bringing nature indoors",
+//   },
+// }
+
+
+export default function CatalogueCustomizePage() {
+   const params = useParams<{ id: string }>()
+  const catalogueId = params.id
   const [selectedSize, setSelectedSize] = useState("")
   const [width, setWidth] = useState("")
   const [height, setHeight] = useState("")
-  const [materialType, setMaterialType] = useState("")
+  const [materials, setMaterials] = useState<Material[]>([])
+  const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null)
   const [showMaterialModal, setShowMaterialModal] = useState(false)
+  const [specialNotes, setSpecialNotes] = useState("")
 
-  const design =  designData[1]; // Replace with params.id to fetch the correct design
+  
+
+  //const design =  designData[1]; // Replace with params.id to fetch the correct design
+  const dispatch = useDispatch<any>();
+  const [design, setDesign] = useState<any>(null);
+
+
+  useEffect(() => {
+  const loadCatalogue = async () => {
+    try {
+      const raw = await dispatch(getCatalogueById(params.id));
+      const adapted = adaptCatalogue(raw);
+      setDesign(adapted);
+    } catch (err) {
+      console.error("Failed to load catalogue", err);
+    }
+  };
+
+  loadCatalogue();
+}, [params.id, dispatch]);
+
+useEffect(() => {
+  const loadMaterials = async () => {
+    try {
+      // 🔹 catalogue kis category ka hai
+      const category = await dispatch(
+        getCategoryBySlug("wallpaper")
+      )
+
+      if (!category?._id) return
+
+      const res = await dispatch(
+        getSelectableMaterials(category._id)
+      )
+
+      setMaterials(adaptMaterials(res))
+    } catch (err) {
+      console.error("Failed to load materials", err)
+    }
+  }
+
+  loadMaterials()
+}, [dispatch])
+
+
+const handleAddToCart = async () => {
+  if (!design || !selectedMaterial || !width || !height) {
+    alert("Please select size and material")
+    return
+  }
+
+  const configurationJson = JSON.stringify({
+    imageType: "CATALOGUE",
+    catalogueImage: design.image,      // 🔥 catalogue image
+    catalogueId: design.id,
+    designName: design.name,
+
+    width,
+    height,
+    unit: "in",
+
+    materialId: selectedMaterial.id,
+    materialName: selectedMaterial.name,
+
+    specialNotes,
+    category: "WALLPAPER_CATALOGUE",
+  })
+
+  await dispatch(
+    addToCart({
+      productType: "WALLPAPER",
+      productRefId: design.id,          // 🔥 catalogue id
+      configurationJson,
+      quantity: 1,
+      unitPrice: design.price,          // 🔥 base price / sq ft
+    })
+  )
+  
+}
+
+
 
   const wallpaperSizes = [
     { value: "custom", label: "Custom Size" },
     { value: "standard-1", label: "Standard Size 1" },
     { value: "standard-2", label: "Standard Size 2" },
   ]
+
+  if (!design) return null;
+
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -203,7 +302,8 @@ export default function CatalogueCustomizePage({ params }: { params: { id: strin
                   className="w-full justify-between border-brand-pink text-brand-pink hover:bg-brand-pink/5 bg-transparent"
                   onClick={() => setShowMaterialModal(true)}
                 >
-                  {materialType || "Select Material Type"}
+                  {selectedMaterial ? selectedMaterial.name : "Select Material Type"}
+
                   <Info className="w-4 h-4" />
                 </Button>
               </CardContent>
@@ -214,11 +314,14 @@ export default function CatalogueCustomizePage({ params }: { params: { id: strin
               <CardContent className="pt-6 space-y-4">
                 <div>
                   <Label htmlFor="special-notes">Special Notes</Label>
-                  <Textarea
+                 <Textarea
                     id="special-notes"
+                    value={specialNotes}
+                    onChange={(e) => setSpecialNotes(e.target.value)}
                     placeholder="Any special requirements or notes..."
                     className="min-h-[80px]"
                   />
+
                 </div>
               </CardContent>
             </Card>
@@ -251,12 +354,14 @@ export default function CatalogueCustomizePage({ params }: { params: { id: strin
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 pt-4">
-                  <Button
-                    variant="outline"
-                    className="border-brand-pink text-brand-pink hover:bg-brand-pink/5 bg-transparent"
-                  >
-                    Add to Cart
-                  </Button>
+                 <Button
+                  onClick={handleAddToCart}
+                  variant="outline"
+                  className="border-brand-pink text-brand-pink hover:bg-brand-pink/5 bg-transparent"
+                >
+                  Add to Cart
+                </Button>
+
                   <Button className="bg-brand-cyan hover:bg-brand-cyan/90 text-white">Order Now</Button>
                 </div>
               </CardContent>
@@ -266,18 +371,20 @@ export default function CatalogueCustomizePage({ params }: { params: { id: strin
       </div>
 
       {/* Material Selection Modal */}
-      {showMaterialModal && (
-        <MaterialSelectionModal
-                  materials={wallpaperMaterials}
-                  title="Select Material"
-                  subtitle="Choose from our premium wallpaper material collection"
-                  onClose={() => setShowMaterialModal(false)}
-                  onSelect={(material) => {
-                    setMaterialType(material)
-                    setShowMaterialModal(false)
-                  }}
-                />
-      )}
+     {showMaterialModal && (
+  <MaterialSelectionModal
+  materials={materials}
+  title="Select Material"
+  subtitle="Choose from our premium wallpaper material collection"
+  onClose={() => setShowMaterialModal(false)}
+  onSelect={(material) => {
+    setSelectedMaterial(material)
+    setShowMaterialModal(false)   // ✅ modal close
+  }}
+/>
+
+)}
+
     </div>
   )
 }

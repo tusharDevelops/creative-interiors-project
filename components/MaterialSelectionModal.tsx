@@ -6,24 +6,14 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { MaterialDetailsModal } from "@/components/MaterialDetailsModal"
+import { Material } from "@/types/material"
 
-interface Material {
-  id: number
-  name: string
-  code: string
-  price: number
-  rating: number
-  category: string
-  description: string
-  features: string[]
-  image: string
-  badge: string
-}
+
 
 interface MaterialSelectionModalProps {
   materials?: Material[]
   onClose: () => void
-  onSelect: (material: string) => void
+  onSelect: (material: Material) => void   // 👈 full object
   title?: string
   subtitle?: string
 }
@@ -40,59 +30,59 @@ export function MaterialSelectionModal({
   const [selectedMaterialDetails, setSelectedMaterialDetails] = useState<Material | null>(null)
 
   // Default materials if none provided
-  const defaultMaterials: Material[] = [
-    {
-      id: 1,
-      name: "Classic Matte",
-      code: "MAT-001",
-      price: 45,
-      rating: 4.8,
-      category: "Premium",
-      description: "Smooth matte finish ideal for residential applications with excellent print quality.",
-      features: ["Water", "Eco"],
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=200&fit=crop",
-      badge: "premium",
-    },
-    {
-      id: 2,
-      name: "Commercial Grade Vinyl",
-      code: "VIN-002",
-      price: 65,
-      rating: 4.7,
-      category: "Commercial",
-      description: "Heavy-duty vinyl designed for commercial spaces with maximum durability.",
-      features: ["Water", "Fire"],
-      image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop",
-      badge: "commercial",
-    },
-    {
-      id: 3,
-      name: "Eco-Friendly Paper",
-      code: "ECO-003",
-      price: 35,
-      rating: 4.3,
-      category: "Eco",
-      description: "Sustainable paper-based wallpaper made from recycled materials.",
-      features: ["Eco"],
-      image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=200&fit=crop",
-      badge: "eco",
-    },
-    {
-      id: 4,
-      name: "Luxury Vinyl Premium",
-      code: "LVP-004",
-      price: 85,
-      rating: 4.9,
-      category: "Premium",
-      description: "High-end vinyl with superior durability and premium finish. Perfect for high-traffic areas.",
-      features: ["Water", "Fire"],
-      image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=200&fit=crop",
-      badge: "premium",
-    },
-  ]
+  // const defaultMaterials: Material[] = [
+  //   {
+  //     id: 1,
+  //     name: "Classic Matte",
+  //     code: "MAT-001",
+  //     price: 45,
+  //     rating: 4.8,
+  //     category: "Premium",
+  //     description: "Smooth matte finish ideal for residential applications with excellent print quality.",
+  //     features: ["Water", "Eco"],
+  //     image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=200&fit=crop",
+  //     badge: "premium",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Commercial Grade Vinyl",
+  //     code: "VIN-002",
+  //     price: 65,
+  //     rating: 4.7,
+  //     category: "Commercial",
+  //     description: "Heavy-duty vinyl designed for commercial spaces with maximum durability.",
+  //     features: ["Water", "Fire"],
+  //     image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop",
+  //     badge: "commercial",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Eco-Friendly Paper",
+  //     code: "ECO-003",
+  //     price: 35,
+  //     rating: 4.3,
+  //     category: "Eco",
+  //     description: "Sustainable paper-based wallpaper made from recycled materials.",
+  //     features: ["Eco"],
+  //     image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=200&fit=crop",
+  //     badge: "eco",
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Luxury Vinyl Premium",
+  //     code: "LVP-004",
+  //     price: 85,
+  //     rating: 4.9,
+  //     category: "Premium",
+  //     description: "High-end vinyl with superior durability and premium finish. Perfect for high-traffic areas.",
+  //     features: ["Water", "Fire"],
+  //     image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=200&fit=crop",
+  //     badge: "premium",
+  //   },
+  // ]
 
   // Use provided materials or fallback to default
-  const activeMaterials = materials.length > 0 ? materials : defaultMaterials
+ const activeMaterials = materials ?? []
 
   // Generate categories dynamically from materials
   const generateCategories = () => {
@@ -319,7 +309,7 @@ export function MaterialSelectionModal({
                         <Button
                           size="sm"
                           className="flex-1 bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg transition-all duration-200"
-                          onClick={() => onSelect(material.name || "Unknown Material")}
+                          onClick={() => onSelect(material)}
                         >
                           Select
                         </Button>
@@ -344,11 +334,17 @@ export function MaterialSelectionModal({
 
       {/* Material Details Modal */}
       {selectedMaterialDetails && (
-        <MaterialDetailsModal 
-          material={selectedMaterialDetails} 
-          onClose={() => setSelectedMaterialDetails(null)} 
-        />
-      )}
+  <MaterialDetailsModal 
+    material={selectedMaterialDetails} 
+    onClose={() => setSelectedMaterialDetails(null)} 
+    onSelect={(material) => {
+      onSelect(material)                 // 🔥 pass up
+      setSelectedMaterialDetails(null)   // close details
+      onClose()                           // close selection modal
+    }}
+  />
+)}
+
     </>
   )
 }

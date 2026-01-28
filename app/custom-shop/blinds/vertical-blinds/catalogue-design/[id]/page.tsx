@@ -11,7 +11,23 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { MaterialSelectionModal } from "@/components/MaterialSelectionModal"
 import Image from "next/image"
-import { verticalBlindsMaterials } from "@/utils/Material"
+//import { verticalBlindsMaterials } from "@/utils/Material"
+
+import { useEffect } from "react"
+import { useDispatch } from "react-redux"
+import { useParams } from "next/navigation"
+
+import {
+  getCatalogueById,
+  getCategoryBySlug,
+  getSelectableMaterials,
+} from "@/services/operations/productAPI"
+
+import { adaptCatalogue } from "@/adapters/catalogueAdapter"
+import { adaptMaterials } from "@/adapters/materialAdapter"
+import type { Material } from "@/types/material"
+import { addToCart } from "@/services/operations/cartAPI"
+
 
 
 // Mock design data - in real app this would come from API
@@ -63,17 +79,102 @@ const controlOptions = [
   { value: "motorized", label: "Motorized" },
 ]
 
-export default function VerticalBlindsCatalogueCustomizePage({ params }: { params: { id: string } }) {
+export default function VerticalBlindsCatalogueCustomizePage() {
   const [selectedSize, setSelectedSize] = useState("")
   const [width, setWidth] = useState("")
   const [height, setHeight] = useState("")
-  const [materialType, setMaterialType] = useState("")
   const [slatWidth, setSlatWidth] = useState("")
   const [mountingType, setMountingType] = useState("")
   const [controlType, setControlType] = useState("")
   const [showMaterialModal, setShowMaterialModal] = useState(false)
+  const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null)
+  const [specialNotes, setSpecialNotes] = useState("")
 
-  const design =  designData[1]
+
+ const params = useParams<{ id: string }>()
+const dispatch = useDispatch<any>()
+const handleAddToCart = async () => {
+  if (
+    !design ||
+    !selectedMaterial ||
+    !width ||
+    !height ||
+    !slatWidth ||
+    !mountingType ||
+    !controlType
+  ) {
+    alert("Please complete all required fields")
+    return
+  }
+
+  const configurationJson = JSON.stringify({
+    imageType: "CATALOGUE",
+    catalogueId: design.id,
+    catalogueImage: design.image,
+
+    width,
+    height,
+    unit: "cm",
+
+    slatWidth,
+    mountingType,
+    controlType,
+
+    materialId: selectedMaterial.id,
+    materialName: selectedMaterial.name,
+
+    specialNotes,
+    category: "VERTICAL_BLINDS_CATALOGUE",
+  })
+
+  await dispatch(
+    addToCart({
+      productType: "BLINDS",
+      productRefId: "CATALOGUE-VERTICAL-BLINDS",
+      configurationJson,
+      quantity: 1,
+      unitPrice: design.price,
+    })
+  )
+}
+
+
+const [design, setDesign] = useState<any>(null)
+const [materials, setMaterials] = useState<Material[]>([])
+
+useEffect(() => {
+  const loadCatalogue = async () => {
+    try {
+      const raw = await dispatch(getCatalogueById(params.id))
+      const adapted = adaptCatalogue(raw)
+      setDesign(adapted)
+    } catch (err) {
+      console.error("Failed to load vertical catalogue", err)
+    }
+  }
+
+  if (params?.id) loadCatalogue()
+}, [params.id, dispatch])
+
+useEffect(() => {
+  const loadMaterials = async () => {
+    try {
+      const category = await dispatch(getCategoryBySlug("vertical-blinds"))
+      if (!category?._id) return
+
+      const res = await dispatch(getSelectableMaterials(category._id))
+      setMaterials(adaptMaterials(res))
+    } catch (err) {
+      console.error("Failed to load vertical materials", err)
+    }
+  }
+
+  loadMaterials()
+}, [dispatch])
+
+if (!design) return null
+
+
 
   return (
     <div className="min-h-screen bg-white">
@@ -238,7 +339,8 @@ export default function VerticalBlindsCatalogueCustomizePage({ params }: { param
                   className="w-full justify-between border-brand-pink text-brand-pink hover:bg-brand-pink/5 bg-transparent"
                   onClick={() => setShowMaterialModal(true)}
                 >
-                  {materialType || "Select Material Type"}
+                  {selectedMaterial ? selectedMaterial.name : "Select Material Type"}
+
                   <Info className="w-4 h-4" />
                 </Button>
               </CardContent>
@@ -317,10 +419,13 @@ export default function VerticalBlindsCatalogueCustomizePage({ params }: { param
                 <div>
                   <Label htmlFor="special-notes">Special Notes</Label>
                   <Textarea
-                    id="special-notes"
-                    placeholder="Any special requirements or notes..."
-                    className="min-h-[80px] border-2 border-gray-200 hover:border-brand-cyan transition-colors"
-                  />
+                  id="special-notes"
+                  placeholder="Any special requirements or notes..."
+                  value={specialNotes}
+                  onChange={(e) => setSpecialNotes(e.target.value)}
+                  className="min-h-[80px] border-2 border-gray-200 hover:border-brand-cyan transition-colors"
+                />
+
                 </div>
               </CardContent>
             </Card>
@@ -357,12 +462,14 @@ export default function VerticalBlindsCatalogueCustomizePage({ params }: { param
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 pt-4">
-                  <Button
-                    variant="outline"
-                    className="border-brand-pink text-brand-pink hover:bg-brand-pink/5 bg-transparent"
-                  >
-                    Add to Cart
-                  </Button>
+                <Button
+                onClick={handleAddToCart}
+                variant="outline"
+                className="border-brand-pink text-brand-pink hover:bg-brand-pink/5 bg-transparent"
+              >
+                Add to Cart
+              </Button>
+
                   <Button className="bg-brand-cyan hover:bg-brand-cyan/90 text-white">Order Now</Button>
                 </div>
               </CardContent>
@@ -373,16 +480,16 @@ export default function VerticalBlindsCatalogueCustomizePage({ params }: { param
 
       {/* Material Selection Modal */}
       {showMaterialModal && (
-        <MaterialSelectionModal
-          materials={verticalBlindsMaterials}
-          title="Select Material"
-          subtitle="Choose from our premium vertical blind material collection"
-          onClose={() => setShowMaterialModal(false)}
-          onSelect={(material) => {
-            setMaterialType(material)
-            setShowMaterialModal(false)
-          }}
-        />
+       <MaterialSelectionModal
+        materials={materials}
+        title="Select Material"
+        subtitle="Choose from our premium vertical blind material collection"
+        onClose={() => setShowMaterialModal(false)}
+        onSelect={(material) => {
+          setSelectedMaterial(material)
+          setShowMaterialModal(false)
+        }}
+      />
       )}
     </div>
   )

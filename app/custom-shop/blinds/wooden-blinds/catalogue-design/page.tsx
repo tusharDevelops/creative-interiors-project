@@ -7,90 +7,100 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import Image from "next/image"
+import { useEffect } from "react"
+import { useDispatch } from "react-redux"
+
+import {
+  getCategoryBySlug,
+  getCataloguesByCategory,
+} from "@/services/operations/productAPI"
+
+import { adaptCatalogueList } from "@/adapters/catalogueAdapter"
 
 
-const woodenBlindDesigns = [
-  {
-    id: 1,
-    name: "Classic Oak Wooden",
-    category: "Traditional",
-    price: 189.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["oak", "classic"],
-    finish: "Non-metallic",
-    bladeSize: "35mm",
-  },
-  {
-    id: 2,
-    name: "Metallic Walnut Wooden",
-    category: "Premium",
-    price: 229.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["walnut", "metallic"],
-    finish: "Metallic",
-    bladeSize: "50mm",
-  },
-  {
-    id: 3,
-    name: "Natural Pine Wooden",
-    category: "Rustic",
-    price: 159.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["pine", "natural"],
-    finish: "Non-metallic",
-    bladeSize: "25mm",
-  },
-  {
-    id: 4,
-    name: "Mahogany Metallic Wooden",
-    category: "Luxury",
-    price: 269.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["mahogany", "luxury"],
-    finish: "Metallic",
-    bladeSize: "50mm",
-  },
-  {
-    id: 5,
-    name: "Bamboo Natural Wooden",
-    category: "Eco",
-    price: 179.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["bamboo", "eco"],
-    finish: "Non-metallic",
-    bladeSize: "35mm",
-  },
-  {
-    id: 6,
-    name: "Cherry Metallic Wooden",
-    category: "Premium",
-    price: 249.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["cherry", "premium"],
-    finish: "Metallic",
-    bladeSize: "25mm",
-  },
-  {
-    id: 7,
-    name: "Teak Traditional Wooden",
-    category: "Classic",
-    price: 199.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["teak", "traditional"],
-    finish: "Non-metallic",
-    bladeSize: "50mm",
-  },
-  {
-    id: 8,
-    name: "Ash Metallic Wooden",
-    category: "Modern",
-    price: 219.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["ash", "modern"],
-    finish: "Metallic",
-    bladeSize: "35mm",
-  },
-]
+
+// const woodenBlindDesigns = [
+//   {
+//     id: 1,
+//     name: "Classic Oak Wooden",
+//     category: "Traditional",
+//     price: 189.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["oak", "classic"],
+//     finish: "Non-metallic",
+//     bladeSize: "35mm",
+//   },
+//   {
+//     id: 2,
+//     name: "Metallic Walnut Wooden",
+//     category: "Premium",
+//     price: 229.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["walnut", "metallic"],
+//     finish: "Metallic",
+//     bladeSize: "50mm",
+//   },
+//   {
+//     id: 3,
+//     name: "Natural Pine Wooden",
+//     category: "Rustic",
+//     price: 159.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["pine", "natural"],
+//     finish: "Non-metallic",
+//     bladeSize: "25mm",
+//   },
+//   {
+//     id: 4,
+//     name: "Mahogany Metallic Wooden",
+//     category: "Luxury",
+//     price: 269.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["mahogany", "luxury"],
+//     finish: "Metallic",
+//     bladeSize: "50mm",
+//   },
+//   {
+//     id: 5,
+//     name: "Bamboo Natural Wooden",
+//     category: "Eco",
+//     price: 179.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["bamboo", "eco"],
+//     finish: "Non-metallic",
+//     bladeSize: "35mm",
+//   },
+//   {
+//     id: 6,
+//     name: "Cherry Metallic Wooden",
+//     category: "Premium",
+//     price: 249.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["cherry", "premium"],
+//     finish: "Metallic",
+//     bladeSize: "25mm",
+//   },
+//   {
+//     id: 7,
+//     name: "Teak Traditional Wooden",
+//     category: "Classic",
+//     price: 199.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["teak", "traditional"],
+//     finish: "Non-metallic",
+//     bladeSize: "50mm",
+//   },
+//   {
+//     id: 8,
+//     name: "Ash Metallic Wooden",
+//     category: "Modern",
+//     price: 219.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["ash", "modern"],
+//     finish: "Metallic",
+//     bladeSize: "35mm",
+//   },
+// ]
 
 export default function WoodenBlindsCataloguePage() {
   const [selectedFinish, setSelectedFinish] = useState("All")
@@ -99,11 +109,46 @@ export default function WoodenBlindsCataloguePage() {
   const finishOptions = ["All", "Metallic", "Non-metallic"]
   const bladeSizeOptions = ["All", "25mm", "35mm", "50mm"]
 
-  const filteredDesigns = woodenBlindDesigns.filter((design) => {
-    const matchesFinish = selectedFinish === "All" || design.finish === selectedFinish
-    const matchesBladeSize = selectedBladeSize === "All" || design.bladeSize === selectedBladeSize
-    return matchesFinish && matchesBladeSize
-  })
+  const dispatch = useDispatch<any>()
+const [designs, setDesigns] = useState<any[]>([])
+
+useEffect(() => {
+  const loadCatalogue = async () => {
+    try {
+      const category = await dispatch(
+        getCategoryBySlug("wooden-blinds")
+      )
+
+      if (!category?._id) return
+
+      const res = await dispatch(
+        getCataloguesByCategory(category._id)
+      )
+
+      setDesigns(adaptCatalogueList(res))
+      
+    } catch (err) {
+      console.error("Failed to load wooden catalogue", err)
+    }
+  }
+
+  loadCatalogue()
+}, [dispatch])
+
+
+
+  const filteredDesigns = designs.filter((design) => {
+  const matchesFinish =
+    selectedFinish === "All" ||
+    design.tags?.includes(selectedFinish.toLowerCase())
+
+  const matchesBladeSize =
+    selectedBladeSize === "All" ||
+    design.tags?.includes(selectedBladeSize)
+
+  return matchesFinish && matchesBladeSize
+})
+
 
   return (
     <div className="min-h-screen bg-white">
@@ -208,7 +253,8 @@ export default function WoodenBlindsCataloguePage() {
 
         {/* Results Count */}
         <div className="mb-6 text-sm text-muted-foreground">
-          Showing {filteredDesigns.length} of {woodenBlindDesigns.length} designs
+          Showing {filteredDesigns.length} of {designs.length}
+
         </div>
 
         {/* Designs Grid */}
@@ -227,7 +273,7 @@ export default function WoodenBlindsCataloguePage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute top-3 left-3">
-                  {design.tags.map((tag) => (
+                  {design.tags.map((tag: string) => (
                     <span
                       key={tag}
                       className="inline-block px-2 py-1 bg-amber-600 text-white text-xs rounded-full mr-1 mb-1"

@@ -9,7 +9,14 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Image from "next/image"
 import { MaterialSelectionModal } from "@/components/MaterialSelectionModal"
-import {rollerBlindsMaterials} from "@/utils/Material"
+// import {rollerBlindsMaterials} from "@/utils/Material"
+import { useEffect } from "react"
+import { useDispatch } from "react-redux"
+import type { Material } from "@/types/material"
+import { getCategoryBySlug, getSelectableMaterials } from "@/services/operations/productAPI"
+import { adaptMaterials } from "@/adapters/materialAdapter"
+import { addToCart } from "@/services/operations/cartAPI"
+
 
   
 const colors = [
@@ -26,8 +33,70 @@ export default function RollerBlindsCustomPage() {
   const [selectedColor, setSelectedColor] = useState("")
   const [width, setWidth] = useState("")
   const [height, setHeight] = useState("")
-  const [showMaterialModal, setShowMaterialModal] = useState(false)
-  const [materialType, setMaterialType] = useState("")
+
+  const dispatch = useDispatch<any>()
+
+const [materials, setMaterials] = useState<Material[]>([])
+const [selectedMaterial, setSelectedMaterial] = useState<Material | null>(null)
+const [showMaterialModal, setShowMaterialModal] = useState(false)
+const [imageUrl, setImageUrl] = useState("")
+
+const handleAddToCart = async () => {
+  if (!imageUrl || !selectedMaterial || !width || !height) {
+    alert("Please complete all required fields")
+    return
+  }
+
+  const configurationJson = JSON.stringify({
+    imageType: "EXTERNAL_URL",   // 🔥 IMPORTANT
+    imageUrl,
+
+    width,
+    height,
+    unit: "cm",
+
+    materialId: selectedMaterial.id,
+    materialName: selectedMaterial.name,
+
+    category: "ROLLER_BLINDS_CUSTOM",
+  })
+
+  await dispatch(
+    addToCart({
+      productType: "BLINDS",
+      productRefId: "CUSTOM-ROLLER-BLINDS",
+      configurationJson,
+      quantity: 1,
+      unitPrice: 129, // temp
+    })
+  )
+}
+
+
+
+useEffect(() => {
+  const loadRollerMaterials = async () => {
+    try {
+      // 1️⃣ get roller-blinds category
+      const category = await dispatch(getCategoryBySlug("roller-blinds"))
+      if (!category?._id) return
+
+      // 2️⃣ get selectable materials
+      const res = await dispatch(
+        getSelectableMaterials(category._id)
+      )
+
+      // 3️⃣ adapt for UI
+      setMaterials(adaptMaterials(res))
+     
+    } catch (err) {
+      console.error("Failed to load roller blind materials", err)
+    }
+  }
+
+  loadRollerMaterials()
+}, [dispatch])
+
 
 
 
@@ -68,41 +137,58 @@ export default function RollerBlindsCustomPage() {
         <div className="grid lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
           {/* Left Side - Preview */}
           <div className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
-            <Card className="border border-gray-200 overflow-hidden bg-white">
-              <CardHeader className="bg-gray-50">
-                <CardTitle className="flex items-center gap-2 text-foreground">
-                  <Palette className="w-5 h-5" />
-                  Preview
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-8">
-                <div className="aspect-[4/3] bg-gray-50 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300">
-                  <div className="text-center">
-                    <Upload className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-                    <p className="text-gray-600 mb-2">Upload your image to see preview</p>
-                    <p className="text-sm text-gray-500">Drag & drop or click to browse</p>
+           <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-brand-pink">
+                <div className="w-2 h-2 bg-brand-pink rounded-full"></div>
+                Live Preview
+              </CardTitle>
+            </CardHeader>
+
+            <CardContent>
+              <div className="relative aspect-[4/3] bg-gray-100 rounded-lg overflow-hidden">
+                {imageUrl ? (
+                  <Image
+                    src={imageUrl}
+                    alt="Wallpaper Preview"
+                    fill
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-full text-gray-500">
+                    <Upload className="w-10 h-10 mb-2" />
+                    <p>Paste image URL to preview</p>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
 
             {/* Upload Section */}
-            <Card className="mt-6 border border-gray-200 bg-white">
-              <CardHeader className="bg-gray-50">
-                <CardTitle className="flex items-center gap-2 text-foreground">
-                  <Upload className="w-5 h-5" />
-                  Upload Your Image
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-6">
-                <div className="border-2 border-dashed border-brand-pink/30 rounded-lg p-8 text-center hover:border-brand-pink/50 transition-colors cursor-pointer">
-                  <Upload className="w-12 h-12 mx-auto mb-4 text-brand-pink" />
-                  <p className="text-lg font-medium mb-2">Drop your image here</p>
-                  <p className="text-sm text-muted-foreground mb-4">or click to browse</p>
-                  <Button className="bg-brand-pink hover:bg-brand-pink/90 text-white">Browse Files</Button>
-                </div>
-              </CardContent>
-            </Card>
+            <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-brand-pink">
+                <div className="w-2 h-2 bg-brand-pink rounded-full"></div>
+                Image Source
+              </CardTitle>
+            </CardHeader>
+
+            <CardContent className="space-y-3">
+              <Label>Paste Image URL</Label>
+
+              <Input
+                placeholder="https://images.unsplash.com/..."
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+              />
+
+              <p className="text-xs text-gray-500">
+                Shutterstock / Unsplash / Adobe Stock / Pexels
+              </p>
+            </CardContent>
+          </Card>
+
           </div>
 
           {/* Right Side - Customization Form */}
@@ -125,7 +211,8 @@ export default function RollerBlindsCustomPage() {
                     className="w-full justify-between border-brand-pink text-brand-pink hover:bg-brand-pink/5 bg-transparent"
                     onClick={() => setShowMaterialModal(true)}
                   >
-                    {materialType || "Select Material Type"}
+                    {selectedMaterial ? selectedMaterial.name : "Select Material Type"}
+
                     <Info className="w-4 h-4" />
                   </Button>
                 </div>
@@ -207,9 +294,13 @@ export default function RollerBlindsCustomPage() {
 
                 {/* CTA Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 pt-6">
-                  <Button className="flex-1 bg-gradient-to-r from-brand-pink to-brand-orange hover:from-brand-orange hover:to-brand-pink text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                    <Button
+                    onClick={handleAddToCart}
+                    className="flex-1 bg-gradient-to-r from-brand-pink to-brand-orange hover:from-brand-orange hover:to-brand-pink text-white font-semibold py-3 px-6 rounded-lg"
+                    >
                     Add to Cart
                   </Button>
+
                   <Button
                     variant="outline"
                     className="flex-1 border-2 border-brand-cyan text-brand-cyan hover:bg-brand-cyan hover:text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 bg-transparent"
@@ -224,18 +315,18 @@ export default function RollerBlindsCustomPage() {
       </div>
 
       {/* Material Selection Modal */}
-      {showMaterialModal && (
-        <MaterialSelectionModal
-        materials={rollerBlindsMaterials}
-        title="Select Material for Custom Photo Roller Blinds"
-        subtitle="Choose the best material for your personalised roller blinds"
-        onClose={() => setShowMaterialModal(false)}
-        onSelect={(material) => {
-          setMaterialType(material)
-          setShowMaterialModal(false)
-        }}
-      />
-      )}
+     {showMaterialModal && (
+  <MaterialSelectionModal
+    materials={materials}   // 🔥 API DATA
+    title="Select Material for Custom Photo Roller Blinds"
+    subtitle="Choose the best material for your personalised roller blinds"
+    onClose={() => setShowMaterialModal(false)}
+    onSelect={(material) => {
+      setSelectedMaterial(material)
+      setShowMaterialModal(false)
+    }}
+  />
+)}
     </div>
   )
 }

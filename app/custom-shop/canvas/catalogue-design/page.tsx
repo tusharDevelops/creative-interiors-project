@@ -1,3 +1,16 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+
+import {
+  getCategoryBySlug,
+  getCataloguesByCategory,
+} from "@/services/operations/productAPI"
+
+import { adaptCatalogue } from "@/adapters/catalogueAdapter"
+
+
 import Link from "next/link"
 import { ArrowLeft, Search, Filter, Grid, List } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -6,58 +19,81 @@ import { Input } from "@/components/ui/input"
 import Image from "next/image"
 
 
-const canvasDesigns = [
-  {
-    id: 1,
-    name: "Abstract Waves",
-    category: "Abstract",
-    price: 19.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["trending", "modern"],
-  },
-  {
-    id: 2,
-    name: "Mountain Landscape",
-    category: "Nature",
-    price: 24.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["popular", "landscape"],
-  },
-  {
-    id: 3,
-    name: "Geometric Patterns",
-    category: "Modern",
-    price: 22.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["geometric", "clean"],
-  },
-  {
-    id: 4,
-    name: "Vintage Botanical",
-    category: "Classic",
-    price: 27.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["vintage", "botanical"],
-  },
-  {
-    id: 5,
-    name: "City Skyline",
-    category: "Urban",
-    price: 29.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["urban", "modern"],
-  },
-  {
-    id: 6,
-    name: "Ocean Sunset",
-    category: "Nature",
-    price: 26.99,
-    image: "/placeholder.svg?height=300&width=300",
-    tags: ["sunset", "calming"],
-  },
-]
+
+
+// const canvasDesigns = [
+//   {
+//     id: 1,
+//     name: "Abstract Waves",
+//     category: "Abstract",
+//     price: 19.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["trending", "modern"],
+//   },
+//   {
+//     id: 2,
+//     name: "Mountain Landscape",
+//     category: "Nature",
+//     price: 24.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["popular", "landscape"],
+//   },
+//   {
+//     id: 3,
+//     name: "Geometric Patterns",
+//     category: "Modern",
+//     price: 22.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["geometric", "clean"],
+//   },
+//   {
+//     id: 4,
+//     name: "Vintage Botanical",
+//     category: "Classic",
+//     price: 27.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["vintage", "botanical"],
+//   },
+//   {
+//     id: 5,
+//     name: "City Skyline",
+//     category: "Urban",
+//     price: 29.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["urban", "modern"],
+//   },
+//   {
+//     id: 6,
+//     name: "Ocean Sunset",
+//     category: "Nature",
+//     price: 26.99,
+//     image: "/placeholder.svg?height=300&width=300",
+//     tags: ["sunset", "calming"],
+//   },
+// ]
 
 export default function CanvasCataloguePage() {
+
+  const dispatch = useDispatch<any>()
+  const [catalogues, setCatalogues] = useState<any[]>([])
+
+  useEffect(() => {
+  const loadCanvasCatalogues = async () => {
+    // 1️⃣ canvas category nikalo
+    const category = await dispatch(getCategoryBySlug("canvas"))
+    if (!category?._id) return
+
+    // 2️⃣ us category ke catalogues lao
+    const res = await dispatch(getCataloguesByCategory(category._id))
+
+    // 3️⃣ adapt karke set karo
+    setCatalogues(res.map(adaptCatalogue))
+  }
+
+  loadCanvasCatalogues()
+}, [dispatch])
+
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <div className="w-full h-52 relative">
@@ -126,7 +162,7 @@ export default function CanvasCataloguePage() {
 
         {/* Designs Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {canvasDesigns.map((design, index) => (
+          {catalogues.map((design, index) => (
             <Card
               key={design.id}
               className="group overflow-hidden border-2 border-transparent hover:border-brand-cyan/50 transition-all duration-300 hover:shadow-xl animate-fade-in"
@@ -140,7 +176,7 @@ export default function CanvasCataloguePage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute top-3 left-3">
-                  {design.tags.map((tag) => (
+                  {design.tags.map((tag: string) => (
                     <span
                       key={tag}
                       className="inline-block px-2 py-1 bg-brand-cyan text-white text-xs rounded-full mr-1 mb-1"
