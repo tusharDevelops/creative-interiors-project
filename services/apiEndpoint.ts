@@ -3,6 +3,7 @@ export const PRODUCT_BASE_URL = "http://localhost:5002/api";
 export const CART_BASE_URL = "http://localhost:5232/api";
 export const ORDER_BASE_URL = "http://localhost:6002/api"; 
 
+
 export const GATEWAY_BASE_URL = "http://localhost:7000/api";
 
 
